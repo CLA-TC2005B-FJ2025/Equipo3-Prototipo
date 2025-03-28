@@ -112,7 +112,7 @@ def get_casillas():
     return jsonify(data)
 
 @app.route('/casilla/<int:id>', methods=['GET'])
-def get_one_usuario(id):
+def get_one_casilla(id):
     conn = get_connection()
     cursor = conn.cursor(as_dict=True)
     cursor.execute('SELECT * FROM Casilla WHERE id = %s', (id,))
@@ -125,7 +125,7 @@ def get_one_usuario(id):
 
 #metodos GET para pregunta
 @app.route('/pregunta', methods=['GET'])
-def get_usuarios():
+def get_preguntas():
     conn = get_connection()
     cursor = conn.cursor(as_dict=True)
     cursor.execute('SELECT * FROM Pregunta')
@@ -134,7 +134,7 @@ def get_usuarios():
     return jsonify(data)
 
 @app.route('/pregunta/<int:id>', methods=['GET'])
-def get_one_usuario(id):
+def get_one_pregunta(id):
     conn = get_connection()
     cursor = conn.cursor(as_dict=True)
     cursor.execute('SELECT * FROM Pregunta WHERE id = %s', (id,))
