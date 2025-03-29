@@ -327,7 +327,7 @@ def create_pregunta():
 def update_pregunta(id):
     data = request.json
     pregunta = data['pregunta']
-    opcionA = data.get('opcionA')
+    opcionA = data.get('opcionA') #se utiliza data.get() porque pueden ser NULL
     opcionB = data.get('opcionB')
     opcionC = data.get('opcionC')
     opcionD = data.get('opcionD')
@@ -370,7 +370,7 @@ def get_one_intento_correcto(id):
     else:
         return jsonify({'mensaje': 'Registro no encontrado'}), 404
 
-@app.route('/intento_correcto', methods=['POST'])
+@app.route('/intentoCorrecto', methods=['POST'])
 def create_intento_correcto():
     data = request.json
     conn = get_connection()
@@ -381,7 +381,7 @@ def create_intento_correcto():
     conn.close()
     return jsonify({'mensaje': 'IntentoCorrecto registrado'}), 201
 
-@app.route('/intento_correcto/<int:id>', methods=['DELETE'])
+@app.route('/intentoCorrecto/<int:id>', methods=['DELETE'])
 def delete_intento_correcto(id):
     conn = get_connection()
     cursor = conn.cursor()
@@ -412,7 +412,7 @@ def get_one_intento_incorrecto(id):
     else:
         return jsonify({'mensaje': 'Registro no encontrado'}), 404
 
-@app.route('/intento_incorrecto', methods=['POST'])
+@app.route('/intentoIncorrecto', methods=['POST'])
 def create_intento_incorrecto():
     data = request.json
     conn = get_connection()
@@ -423,7 +423,7 @@ def create_intento_incorrecto():
     conn.close()
     return jsonify({'mensaje': 'IntentoIncorrecto registrado'}), 201
 
-@app.route('/intento_incorrecto/<int:id>', methods=['DELETE'])
+@app.route('/intentoIncorrecto/<int:id>', methods=['DELETE'])
 def delete_intento_incorrecto(id):
     conn = get_connection()
     cursor = conn.cursor()
