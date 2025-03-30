@@ -277,6 +277,111 @@ http://localhost:2025
   ```
 ---
 
+### Imagen
+
+#### Obtener todas las imágenes
+- *Método:* GET  
+- *URL:* /imagen  
+- *Respuesta exitosa (200 OK):*
+  ```json
+  [
+    {
+      "idImagen": 1,
+      "URL": "http://ejemplo.com/imagen1.jpg",
+      "estado": "aprobada",
+      "respuesta": "ok",
+      "idEvento": 2,
+      "idUsuario": 5
+    }
+  ]
+  ```
+
+#### Obtener una imagen específica
+- **Método:** GET  
+- **URL:** /imagen/<int:id>  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "URL": "http://ejemplo.com/imagen1.jpg",
+    "estado": "aprobada",
+    "respuesta": "ok",
+    "idEvento": 2,
+    "idUsuario": 5
+  }
+  ```
+  
+- **Respuesta si no existe (404 Not Found):**
+  ```json
+  {
+    "mensaje": "Registro no encontrado"
+  }
+  ```
+
+#### Crear una imagen
+- **Método:** POST  
+- **URL:** /imagen  
+- **Payload:**
+  ```json
+  {
+    "URL": "http://ejemplo.com/imagen2.jpg",
+    "estado": "pendiente",
+    "respuesta": "en revisión",
+    "idEvento": 3,
+    "idUsuario": 7
+  }
+  ```
+  
+- **Respuesta exitosa (201 Created):**
+  ```json
+  {
+    "mensaje": "Imagen creada"
+  }
+  ```
+  
+- **Error si el evento no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "El evento especificado no existe"
+  }
+  ```
+
+#### Actualizar una imagen
+- **Método:** PUT  
+- **URL:** /imagen/<int:id>  
+- **Payload:**
+  ```json
+  {
+    "URL": "http://ejemplo.com/imagen_actualizada.jpg",
+    "estado": "aprobada",
+    "respuesta": "confirmado",
+    "idEvento": 3,
+    "idUsuario": 7
+  }
+  ```
+  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Imagen actualizada"
+  }
+  ```
+  
+- **Error si el evento no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "El evento especificado no existe"
+  }
+  ```
+
+#### Eliminar una imagen
+- **Método:** DELETE  
+- **URL:** /imagen/<int:id>  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Imagen eliminada"
+  }
+  ```
 ## Manejo de Errores
 
 ### Errores Comunes
