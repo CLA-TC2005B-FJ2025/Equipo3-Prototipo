@@ -118,7 +118,7 @@ http://localhost:2025
   [
     {
       "idBoleto": 1,
-      "tipo": false,
+      "tipo": "VIP",
       "idUsuario": 1
     }
   ]
@@ -131,8 +131,70 @@ http://localhost:2025
   ```json
   {
     "idBoleto": 1,
-    "tipo": false,
+    "tipo": "VIP",
     "idUsuario": 1
+  }
+  ```
+- **Respuesta si no existe (404 Not Found):**
+  ```json
+  {
+    "mensaje": "Registro no encontrado"
+  }
+  ```
+
+#### Crear un boleto
+- **Método:** POST  
+- **URL:** `/boleto`  
+- **Payload:**
+  ```json
+  {
+    "tipo": "VIP",
+    "idUsuario": 1
+  }
+  ```
+- **Respuesta exitosa (201 Created):**
+  ```json
+  {
+    "mensaje": "Boleto creado"
+  }
+  ```
+- **Error si el usuario no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "El usuario especificado no existe"
+  }
+  ```
+
+#### Actualizar un boleto
+- **Método:** PUT  
+- **URL:** `/boleto/<int:id>`  
+- **Payload:**
+  ```json
+  {
+    "tipo": "General",
+    "idUsuario": 1
+  }
+  ```
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Boleto actualizado"
+  }
+  ```
+- **Error si el usuario no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "El usuario especificado no existe"
+  }
+  ```
+
+#### Eliminar un boleto
+- **Método:** DELETE  
+- **URL:** `/boleto/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Boleto eliminado"
   }
   ```
 
@@ -146,62 +208,74 @@ http://localhost:2025
   [
     {
       "idEvento": 1,
-      "fechaInicio": "2006-05-08T03:05:15",
-      "fechaFinal": "2006-05-08T03:05:15"
+      "fechaInicio": "2025-04-01",
+      "fechaFinal": "2025-04-05"
     }
   ]
   ```
 
-### Imagen
-
-#### Obtener todas las imágenes
+#### Obtener un evento específico
 - **Método:** GET  
-- **URL:** `/imagen`  
+- **URL:** `/evento/<int:id>`  
 - **Respuesta exitosa (200 OK):**
   ```json
-  [
-    {
-      "idImagen": 1,
-      "URL": "jsfhsrhfkjdhfkjhdkj",
-      "estado": false,
-      "respuesta": "jshfu",
-      "idEvento": 1,
-      "idUsuario": null
-    }
-  ]
+  {
+    "idEvento": 1,
+    "fechaInicio": "2025-04-01",
+    "fechaFinal": "2025-04-05"
+  }
   ```
-
-### Casilla
-
-#### Crear una casilla
-- **Método:** POST  
-- **URL:** `/casilla`  
-- **Payload:**
+- **Respuesta si no existe (404 Not Found):**
   ```json
   {
-    "idImagen": 1,
-    "coordenadaX": 23,
-    "coordenadaY": 43,
-    "idPregunta": 1
+    "mensaje": "Registro no encontrado"
   }
   ```
 
-### Pregunta
-
-#### Crear una pregunta
+#### Crear un evento
 - **Método:** POST  
-- **URL:** `/pregunta`  
+- **URL:** `/evento`  
 - **Payload:**
   ```json
   {
-    "pregunta": "¿Cuál es la capital de Francia?",
-    "opcionA": "Madrid",
-    "opcionB": "París",
-    "opcionC": "Berlín",
-    "opcionD": "Roma",
-    "respuesta": "opcionB"
+    "fechaInicio": "2025-04-01",
+    "fechaFinal": "2025-04-05"
   }
   ```
+- **Respuesta exitosa (201 Created):**
+  ```json
+  {
+    "mensaje": "Evento creado"
+  }
+  ```
+
+#### Actualizar un evento
+- **Método:** PUT  
+- **URL:** `/evento/<int:id>`  
+- **Payload:**
+  ```json
+  {
+    "fechaInicio": "2025-04-02",
+    "fechaFinal": "2025-04-06"
+  }
+  ```
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Evento actualizado"
+  }
+  ```
+
+#### Eliminar un evento
+- **Método:** DELETE  
+- **URL:** `/evento/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Evento eliminado"
+  }
+  ```
+---
 
 ## Manejo de Errores
 
