@@ -772,7 +772,7 @@ http://localhost:2025
 - **400 Bad Request:** Cuando los datos proporcionados son inválidos o faltan campos requeridos.
 
 ### Errores por Relaciones en Base de Datos
-La API verifica las relaciones antes de realizar operaciones para evitar violaciones de integridad:
+La API verifica las relaciones antes de realizar operaciones para evitar violaciones de integridad, por ejemplo:
 
 - No se puede crear/actualizar un Usuario con un `idEvento` inexistente.
 - No se puede crear/actualizar un Boleto con un `idUsuario` inexistente.
