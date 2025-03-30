@@ -500,7 +500,185 @@ http://localhost:2025
   }
   ```
 
-### IntentoIncorrecto
+### Pregunta
+
+#### Obtener todas las preguntas
+- **Método:** **GET**  
+- **URL:** **/pregunta**  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  [
+    {
+      "idPregunta": 1,
+      "pregunta": "¿Cuál es la capital de Francia?",
+      "opcionA": "Madrid",
+      "opcionB": "París",
+      "opcionC": "Berlín",
+      "opcionD": "Roma",
+      "respuesta": "París"
+    }
+  ]
+  ```
+
+#### Obtener una pregunta específica
+- **Método:** **GET**  
+- **URL:** **/pregunta/<int:id>**  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "idPregunta": 1,
+    "pregunta": "¿Cuál es la capital de Francia?",
+    "opcionA": "Madrid",
+    "opcionB": "París",
+    "opcionC": "Berlín",
+    "opcionD": "Roma",
+    "respuesta": "París"
+  }
+  ```
+  
+- **Respuesta si no existe (404 Not Found):**
+  ```json
+  {
+    "mensaje": "Registro no encontrado"
+  }
+  ```
+
+#### Crear una pregunta
+- **Método:** **POST**  
+- **URL:** **/pregunta**  
+- **Payload:**
+  ```json
+  {
+    "pregunta": "¿Cuál es la capital de Italia?",
+    "opcionA": "Madrid",
+    "opcionB": "París",
+    "opcionC": "Berlín",
+    "opcionD": "Roma",
+    "respuesta": "Roma"
+  }
+  ```
+  
+- **Respuesta exitosa (201 Created):**
+  ```json
+  {
+    "mensaje": "Pregunta creada"
+  }
+  ```
+
+#### Actualizar una pregunta
+- **Método:** **PUT**  
+- **URL:** **/pregunta/<int:id>**  
+- **Payload:**
+  ```json
+  {
+    "pregunta": "¿Cuál es la capital de Alemania?",
+    "opcionA": "Madrid",
+    "opcionB": "París",
+    "opcionC": "Berlín",
+    "opcionD": "Roma",
+    "respuesta": "Berlín"
+  }
+  ```
+  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Pregunta actualizada"
+  }
+  ```
+
+#### Eliminar una pregunta
+- **Método:** **DELETE**  
+- **URL:** **/pregunta/<int:id>**  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Pregunta eliminada"
+  }
+  ```
+### Intento Correcto
+
+#### Obtener todos los intentos correctos
+- **Método:** GET  
+- **URL:** `/intentoCorrecto`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  [
+    {
+      "idCorrecto": 1,
+      "idUsuario": 2,
+      "idCasilla": 3,
+      "idImagen": 4
+    }
+  ]
+  ```
+
+#### Obtener un intento correcto específico
+- **Método:** GET  
+- **URL:** `/intentoCorrecto/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "idCorrecto": 1,
+    "idUsuario": 2,
+    "idCasilla": 3,
+    "idImagen": 4
+  }
+  ```
+- **Respuesta si no existe (404 Not Found):**
+  ```json
+  {
+    "mensaje": "Registro no encontrado"
+  }
+  ```
+
+#### Crear un intento correcto
+- **Método:** POST  
+- **URL:** `/intentoCorrecto`  
+- **Payload:**
+  ```json
+  {
+    "idUsuario": 2,
+    "idCasilla": 3,
+    "idImagen": 4
+  }
+  ```
+- **Respuesta exitosa (201 Created):**
+  ```json
+  {
+    "mensaje": "IntentoCorrecto registrado"
+  }
+  ```
+- **Error si el usuario no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "El usuario especificado no existe"
+  }
+  ```
+- **Error si la casilla no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "La casilla especificada no existe"
+  }
+  ```
+- **Error si la imagen no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "La imagen especificada no existe"
+  }
+  ```
+
+#### Eliminar un intento correcto
+- **Método:** DELETE  
+- **URL:** `/intentoCorrecto/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "IntentoCorrecto eliminado"
+  }
+  ```
+  
+### Intento Incorrecto
 
 #### Obtener todos los intentos incorrectos
 - **Método:** GET  
