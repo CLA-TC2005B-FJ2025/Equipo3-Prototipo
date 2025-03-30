@@ -16,6 +16,72 @@ password = "YourPassword123!"
 def get_connection():
     return pymssql.connect(server=server, port=port, user=username, password=password, database=database)
 
+# Metodos para fetch y manejo de errores
+def fetch_one_usuario(id):
+    conn = get_connection()
+    cursor = conn.cursor(as_dict=True)
+    cursor.execute('SELECT * FROM Usuario WHERE id = %s', (id,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+def fetch_one_boleto(id):
+    conn = get_connection()
+    cursor = conn.cursor(as_dict=True)
+    cursor.execute('SELECT * FROM Boleto WHERE id = %s', (id,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+def fetch_one_evento(id):
+    conn = get_connection()
+    cursor = conn.cursor(as_dict=True)
+    cursor.execute('SELECT * FROM Evento WHERE id = %s', (id,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+def fetch_one_imagen(id):
+    conn = get_connection()
+    cursor = conn.cursor(as_dict=True)
+    cursor.execute('SELECT * FROM Imagen WHERE id = %s', (id,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+def fetch_one_casilla(id):
+    conn = get_connection()
+    cursor = conn.cursor(as_dict=True)
+    cursor.execute('SELECT * FROM Casilla WHERE id = %s', (id,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+def fetch_one_pregunta(id):
+    conn = get_connection()
+    cursor = conn.cursor(as_dict=True)
+    cursor.execute('SELECT * FROM Pregunta WHERE id = %s', (id,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+def fetch_one_intento_correcto(id):
+    conn = get_connection()
+    cursor = conn.cursor(as_dict=True)
+    cursor.execute('SELECT * FROM IntentoCorrecto WHERE id = %s', (id,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+def fetch_one_intento_incorrecto(id):
+    conn = get_connection()
+    cursor = conn.cursor(as_dict=True)
+    cursor.execute('SELECT * FROM IntentoIncorrecto WHERE id = %s', (id,))
+    data = cursor.fetchone()
+    conn.close()
+    return data
+
+
 # Metodos para Usuario
 @app.route('/usuario', methods=['GET'])
 def get_usuarios():
@@ -25,41 +91,48 @@ def get_usuarios():
     data = cursor.fetchall()
     conn.close()
     return jsonify(data)
+
 @app.route('/usuario/<int:id>', methods=['GET'])
 def get_one_usuario(id):
-    conn = get_connection()
-    cursor = conn.cursor(as_dict=True)
-    cursor.execute('SELECT * FROM Usuario WHERE id = %s', (id,))
-    data = cursor.fetchone()
-    conn.close()
+    data = fetch_one_usuario(id)
     if data:
         return jsonify(data)
     else:
         return jsonify({'mensaje': 'Registro no encontrado'}), 404
-
+    
 @app.route('/usuario', methods=['POST'])
 def create_usuario():
     data = request.json
     usuario = data['usuario']
     idEvento = data['idEvento']
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO Usuario (usuario, idEvento) VALUES (%s, %s)', (usuario, idEvento))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'Usuario creado'}), 201
-
+    # Check if the event exists using the helper function
+    evento = fetch_one_evento(idEvento)
+    if not evento:
+        return jsonify({'mensaje': 'El evento especificado no existe'}), 400
+    else:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO Usuario (usuario, idEvento) VALUES (%s, %s)', (usuario, idEvento))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Usuario creado'}), 201
+    
 @app.route('/usuario/<int:id>', methods=['PUT'])
 def update_usuario(id):
     data = request.json
     usuario = data['usuario']
     idEvento = data['idEvento']
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('UPDATE Usuario SET usuario = %s, idEvento = %s WHERE idUsuario = %s', (usuario, idEvento, id))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'Usuario actualizado'})
+    # Check if the event exists using the helper function
+    evento = fetch_one_evento(idEvento)
+    if not evento:
+        return jsonify({'mensaje': 'El evento especificado no existe'}), 400
+    else:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE Usuario SET usuario = %s, idEvento = %s WHERE idUsuario = %s', (usuario, idEvento, id))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Usuario actualizado'})
 
 @app.route('/usuario/<int:id>', methods=['DELETE'])
 def delete_usuario(id):
@@ -69,6 +142,9 @@ def delete_usuario(id):
     conn.commit()
     conn.close()
     return jsonify({'mensaje': 'Usuario eliminado'})
+    
+        
+
 
 # Metodos para Boleto
 @app.route('/boleto', methods=['GET'])
@@ -82,11 +158,7 @@ def get_boletos():
     
 @app.route('/boleto/<int:id>', methods=['GET'])
 def get_one_boleto(id):
-    conn = get_connection()
-    cursor = conn.cursor(as_dict=True)
-    cursor.execute('SELECT * FROM Boleto WHERE id = %s', (id,))
-    data = cursor.fetchone()
-    conn.close()
+    data = fetch_one_boleto(id)
     if data:
         return jsonify(data)
     else:
@@ -97,24 +169,34 @@ def create_boleto():
     data = request.json
     tipo = data['tipo']
     idUsuario = data['idUsuario']
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO Boleto (tipo, idUsuario) VALUES (%s, %s)', (tipo, idUsuario))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'Boleto creado'}), 201
+    # Check if the user exists using the helper function
+    usuario = fetch_one_usuario(idUsuario)
+    if not usuario:
+        return jsonify({'mensaje': 'El usuario especificado no existe'}), 400
+    else:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO Boleto (tipo, idUsuario) VALUES (%s, %s)', (tipo, idUsuario))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Boleto creado'}), 201
 
 @app.route('/boleto/<int:id>', methods=['PUT'])
 def update_boleto(id):
     data = request.json
     tipo = data['tipo']
     idUsuario = data['idUsuario']
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('UPDATE Boleto SET tipo = %s, idUsuario = %s WHERE idBoleto = %s', (tipo, idUsuario, id))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'Boleto actualizado'})
+    # Check if the user exists using the helper function
+    usuario = fetch_one_usuario(idUsuario)
+    if not usuario:
+        return jsonify({'mensaje': 'El usuario especificado no existe'}), 400
+    else:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE Boleto SET tipo = %s, idUsuario = %s WHERE idBoleto = %s', (tipo, idUsuario, id))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Boleto actualizado'})
 
 @app.route('/boleto/<int:id>', methods=['DELETE'])
 def delete_boleto(id):
@@ -125,6 +207,8 @@ def delete_boleto(id):
     conn.close()
     return jsonify({'mensaje': 'Boleto eliminado'})
 
+
+
 # Metodos para Evento
 @app.route('/evento', methods=['GET'])
 def get_eventos():
@@ -134,13 +218,10 @@ def get_eventos():
     data = cursor.fetchall()
     conn.close()
     return jsonify(data)
+
 @app.route('/evento/<int:id>', methods=['GET'])
 def get_one_evento(id):
-    conn = get_connection()
-    cursor = conn.cursor(as_dict=True)
-    cursor.execute('SELECT * FROM Evento WHERE id = %s', (id,))
-    data = cursor.fetchone()
-    conn.close()
+    data = fetch_one_evento(id)
     if data:
         return jsonify(data)
     else:
@@ -179,6 +260,8 @@ def delete_evento(id):
     conn.close()
     return jsonify({'mensaje': 'Evento eliminado'})
 
+
+
 # Metodos para Imagen
 @app.route('/imagen', methods=['GET'])
 def get_imagenes():
@@ -191,11 +274,7 @@ def get_imagenes():
 
 @app.route('/imagen/<int:id>', methods=['GET'])
 def get_one_imagen(id):
-    conn = get_connection()
-    cursor = conn.cursor(as_dict=True)
-    cursor.execute('SELECT * FROM Imagen WHERE id = %s', (id,))
-    data = cursor.fetchone()
-    conn.close()
+    data = fetch_one_imagen(id)
     if data:
         return jsonify(data)
     else:
@@ -204,24 +283,44 @@ def get_one_imagen(id):
 @app.route('/imagen', methods=['POST'])
 def create_imagen():
     data = request.json
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO Imagen (URL, estado, respuesta, idEvento, idUsuario) VALUES (%s, %s, %s, %s, %s)',
-                   (data['URL'], data['estado'], data['respuesta'], data['idEvento'], data['idUsuario']))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'Imagen creada'}), 201
+    url = data['URL']
+    estado = data['estado']
+    respuesta = data['respuesta']
+    idEvento = data['idEvento']
+    idUsuario = data.get('idUsuario')  # Optional field, can be NULL
+    # Check if the event exists using the helper function
+    evento = fetch_one_evento(idEvento)
+    if not evento:
+        return jsonify({'mensaje': 'El evento especificado no existe'}), 400
+    else:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO Imagen (URL, estado, respuesta, idEvento, idUsuario) VALUES (%s, %s, %s, %s, %s)',
+                    (url, estado, respuesta, idEvento, idUsuario))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Imagen creada'}), 201
 
 @app.route('/imagen/<int:id>', methods=['PUT'])
 def update_imagen(id):
     data = request.json
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('UPDATE Imagen SET URL = %s, estado = %s, respuesta = %s, idEvento = %s, idUsuario = %s WHERE idImagen = %s',
-                   (data['URL'], data['estado'], data['respuesta'], data['idEvento'], data['idUsuario'], id))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'Imagen actualizada'})
+    url = data['URL']
+    estado = data['estado']
+    respuesta = data['respuesta']
+    idEvento = data['idEvento']
+    idUsuario = data.get('idUsuario')  # Optional field, can be NULL
+    # Check if the event exists using the helper function
+    evento = fetch_one_evento(idEvento)
+    if not evento:
+        return jsonify({'mensaje': 'El evento especificado no existe'}), 400
+    else:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE Imagen SET URL = %s, estado = %s, respuesta = %s, idEvento = %s, idUsuario = %s WHERE idImagen = %s',
+                    (url, estado, respuesta, idEvento, idUsuario, id))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'Imagen actualizada'})
 
 @app.route('/imagen/<int:id>', methods=['DELETE'])
 def delete_imagen(id):
@@ -231,6 +330,7 @@ def delete_imagen(id):
     conn.commit()
     conn.close()
     return jsonify({'mensaje': 'Imagen eliminada'})
+
 
 # Metodos para Casilla
 @app.route('/casilla', methods=['GET'])
@@ -244,11 +344,7 @@ def get_casillas():
 
 @app.route('/casilla/<int:id>', methods=['GET'])
 def get_one_casilla(id):
-    conn = get_connection()
-    cursor = conn.cursor(as_dict=True)
-    cursor.execute('SELECT * FROM Casilla WHERE id = %s', (id,))
-    data = cursor.fetchone()
-    conn.close()
+    data = fetch_one_casilla(id)
     if data:
         return jsonify(data)
     else:
@@ -257,24 +353,52 @@ def get_one_casilla(id):
 @app.route('/casilla', methods=['POST'])
 def create_casilla():
     data = request.json
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO Casilla (idImagen, coordenadaX, coordenadaY, idPregunta) VALUES (%s, %s, %s, %s)',
-                   (data['idImagen'], data['coordenadaX'], data['coordenadaY'], data['idPregunta']))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'Casilla creada'}), 201
+    idImagen = data['idImagen']
+    coordenadaX = data['coordenadaX']
+    coordenadaY = data['coordenadaY']
+    idPregunta = data['idPregunta']
+    # Check if the image exists using the helper function
+    imagen = fetch_one_imagen(idImagen)
+    if not imagen:
+        return jsonify({'mensaje': 'La imagen especificada no existe'}), 400
+    else:
+        # Check if the question exists using the helper function
+        pregunta = fetch_one_pregunta(idPregunta)
+        if not pregunta:
+            return jsonify({'mensaje': 'La pregunta especificada no existe'}), 400
+        else:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO Casilla (idImagen, coordenadaX, coordenadaY, idPregunta) VALUES (%s, %s, %s, %s)',
+                        (idImagen, coordenadaX, coordenadaY, idPregunta))
+            conn.commit()
+            conn.close()
+            return jsonify({'mensaje': 'Casilla creada'}), 201
 
 @app.route('/casilla/<int:id>', methods=['PUT'])
 def update_casilla(id):
     data = request.json
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('UPDATE Casilla SET idImagen = %s, coordenadaX = %s, coordenadaY = %s, idPregunta = %s WHERE idCasilla = %s',
-                   (data['idImagen'], data['coordenadaX'], data['coordenadaY'], data['idPregunta'], id))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'Casilla actualizada'})
+    idImagen = data['idImagen']
+    coordenadaX = data['coordenadaX']
+    coordenadaY = data['coordenadaY']
+    idPregunta = data['idPregunta']
+    # Check if the image exists using the helper function
+    imagen = fetch_one_imagen(idImagen)
+    if not imagen:
+        return jsonify({'mensaje': 'La imagen especificada no existe'}), 400
+    else:
+        # Check if the question exists using the helper function
+        pregunta = fetch_one_pregunta(idPregunta)
+        if not pregunta:
+            return jsonify({'mensaje': 'La pregunta especificada no existe'}), 400
+        else:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute('UPDATE Casilla SET idImagen = %s, coordenadaX = %s, coordenadaY = %s, idPregunta = %s WHERE idCasilla = %s',
+                        (idImagen, coordenadaX, coordenadaY, idPregunta, id))
+            conn.commit()
+            conn.close()
+            return jsonify({'mensaje': 'Casilla actualizada'})
 
 @app.route('/casilla/<int:id>', methods=['DELETE'])
 def delete_casilla(id):
@@ -284,6 +408,8 @@ def delete_casilla(id):
     conn.commit()
     conn.close()
     return jsonify({'mensaje': 'Casilla eliminada'})
+
+
 
 # Metodos para Pregunta
 @app.route('/pregunta', methods=['GET'])
@@ -297,11 +423,7 @@ def get_preguntas():
 
 @app.route('/pregunta/<int:id>', methods=['GET'])
 def get_one_pregunta(id):
-    conn = get_connection()
-    cursor = conn.cursor(as_dict=True)
-    cursor.execute('SELECT * FROM Pregunta WHERE id = %s', (id,))
-    data = cursor.fetchone()
-    conn.close()
+    data = fetch_one_pregunta(id)
     if data:
         return jsonify(data)
     else:
@@ -348,6 +470,7 @@ def delete_pregunta(id):
     conn.close()
     return jsonify({'mensaje': 'Pregunta eliminada'})
 
+
 # Metodos para IntentoCorrecto
 @app.route('/intentoCorrecto', methods=['GET'])
 def get_intentos_correctos():
@@ -360,11 +483,7 @@ def get_intentos_correctos():
 
 @app.route('/intentoCorrecto/<int:id>', methods=['GET'])
 def get_one_intento_correcto(id):
-    conn = get_connection()
-    cursor = conn.cursor(as_dict=True)
-    cursor.execute('SELECT * FROM IntentoCorrecto WHERE id = %s', (id,))
-    data = cursor.fetchone()
-    conn.close()
+    data = fetch_one_intento_correcto(id)
     if data:
         return jsonify(data)
     else:
@@ -373,13 +492,27 @@ def get_one_intento_correcto(id):
 @app.route('/intentoCorrecto', methods=['POST'])
 def create_intento_correcto():
     data = request.json
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO IntentoCorrecto (idUsuario, idCasilla, idImagen) VALUES (%s, %s, %s)',
-                   (data['idUsuario'], data['idCasilla'], data['idImagen']))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'IntentoCorrecto registrado'}), 201
+    idUsuario = data['idUsuario']
+    idCasilla = data['idCasilla']
+    idImagen = data['idImagen']
+    # Check if the user exists using the helper function
+    usuario = fetch_one_usuario(idUsuario)
+    casilla = fetch_one_casilla(idCasilla)
+    imagen = fetch_one_imagen(idImagen)
+    if not usuario:
+        return jsonify({'mensaje': 'El usuario especificado no existe'}), 400
+    elif not casilla:
+        return jsonify({'mensaje': 'La casilla especificada no existe'}), 400
+    elif not imagen:
+        return jsonify({'mensaje': 'La imagen especificada no existe'}), 400
+    else:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO IntentoCorrecto (idUsuario, idCasilla, idImagen) VALUES (%s, %s, %s)',
+                    (idUsuario, idCasilla, idImagen))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'IntentoCorrecto registrado'}), 201
 
 @app.route('/intentoCorrecto/<int:id>', methods=['DELETE'])
 def delete_intento_correcto(id):
@@ -402,11 +535,7 @@ def get_intento_incorrecto():
 
 @app.route('/intentoIncorrecto/<int:id>', methods=['GET'])
 def get_one_intento_incorrecto(id):
-    conn = get_connection()
-    cursor = conn.cursor(as_dict=True)
-    cursor.execute('SELECT * FROM IntentoIncorrecto WHERE id = %s', (id,))
-    data = cursor.fetchone()
-    conn.close()
+    data = fetch_one_intento_incorrecto(id)
     if data:
         return jsonify(data)
     else:
@@ -415,13 +544,28 @@ def get_one_intento_incorrecto(id):
 @app.route('/intentoIncorrecto', methods=['POST'])
 def create_intento_incorrecto():
     data = request.json
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO IntentoIncorrecto (opcionElegida, idUsuario, idCasilla, idImagen) VALUES (%s, %s, %s, %s)',
-                   (data['opcionElegida'], data['idUsuario'], data['idCasilla'], data['idImagen']))
-    conn.commit()
-    conn.close()
-    return jsonify({'mensaje': 'IntentoIncorrecto registrado'}), 201
+    opcionElegida = data['opcionElegida']
+    idUsuario = data['idUsuario']
+    idCasilla = data['idCasilla']
+    idImagen = data['idImagen']
+    # Check if the user exists using the helper function
+    usuario = fetch_one_usuario(idUsuario)
+    casilla = fetch_one_casilla(idCasilla)
+    imagen = fetch_one_imagen(idImagen)
+    if not usuario:
+        return jsonify({'mensaje': 'El usuario especificado no existe'}), 400
+    elif not casilla:
+        return jsonify({'mensaje': 'La casilla especificada no existe'}), 400
+    elif not imagen:
+        return jsonify({'mensaje': 'La imagen especificada no existe'}), 400
+    else:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO IntentoIncorrecto (opcionElegida, idUsuario, idCasilla, idImagen) VALUES (%s, %s, %s, %s)',
+                    (opcionElegida, idUsuario, idCasilla, idImagen))
+        conn.commit()
+        conn.close()
+        return jsonify({'mensaje': 'IntentoIncorrecto registrado'}), 201
 
 @app.route('/intentoIncorrecto/<int:id>', methods=['DELETE'])
 def delete_intento_incorrecto(id):
