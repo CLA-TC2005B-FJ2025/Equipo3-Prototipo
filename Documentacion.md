@@ -301,6 +301,7 @@ http://localhost:2025
 - **Respuesta exitosa (200 OK):**
   ```json
   {
+    "idImagen": 1,
     "URL": "http://ejemplo.com/imagen1.jpg",
     "estado": "aprobada",
     "respuesta": "ok",
@@ -381,7 +382,124 @@ http://localhost:2025
     "mensaje": "Imagen eliminada"
   }
   ```
----
+
+### Casilla
+
+#### Obtener todas las casillas
+- **Método:** GET  
+- **URL:** /casilla  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  [
+    {
+      "idCasilla": 1,
+      "idImagen": 2,
+      "coordenadaX": 10,
+      "coordenadaY": 20,
+      "idPregunta": 5
+    }
+  ]
+  ```
+
+#### Obtener una casilla específica
+- **Método:** GET  
+- **URL:** /casilla/<int:id>  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "idCasilla": 1,
+    "idImagen": 2,
+    "coordenadaX": 10,
+    "coordenadaY": 20,
+    "idPregunta": 5
+  }
+  ```
+  
+- **Respuesta si no existe (404 Not Found):**
+  ```json
+  {
+    "mensaje": "Registro no encontrado"
+  }
+  ```
+
+#### Crear una casilla
+- **Método:** POST  
+- **URL:** /casilla  
+- **Payload:**
+  ```json
+  {
+    "idImagen": 2,
+    "coordenadaX": 15,
+    "coordenadaY": 25,
+    "idPregunta": 7
+  }
+  ```
+  
+- **Respuesta exitosa (201 Created):**
+  ```json
+  {
+    "mensaje": "Casilla creada"
+  }
+  ```
+  
+- **Error si la imagen no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "La imagen especificada no existe"
+  }
+  ```
+  
+- **Error si la pregunta no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "La pregunta especificada no existe"
+  }
+  ```
+
+#### Actualizar una casilla
+- **Método:** PUT  
+- **URL:** /casilla/<int:id>  
+- **Payload:**
+  ```json
+  {
+    "idImagen": 3,
+    "coordenadaX": 30,
+    "coordenadaY": 40,
+    "idPregunta": 8
+  }
+  ```
+  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Casilla actualizada"
+  }
+  ```
+  
+- **Error si la imagen no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "La imagen especificada no existe"
+  }
+  ```
+  
+- **Error si la pregunta no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "La pregunta especificada no existe"
+  }
+  ```
+
+#### Eliminar una casilla
+- **Método:** DELETE  
+- **URL:** /casilla/<int:id>  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "Casilla eliminada"
+  }
+  ```
+
 ### IntentoIncorrecto
 
 #### Obtener todos los intentos incorrectos
