@@ -1,253 +1,220 @@
-# Documentación del API REST
+# Documentación de la API CRUD
 
-## Introducción
-Este API proporciona operaciones CRUD (Create, Read, Update, Delete) para la gestión de usuarios, boletos, eventos, imágenes, casillas, preguntas e intentos en una base de datos SQL Server.
+## Índice
+1. [Base URL](#base-url)
+2. [Endpoints](#endpoints)
+   - [Usuario](#usuario)
+   - [Boleto](#boleto)
+   - [Evento](#evento)
+   - [Imagen](#imagen)
+   - [Casilla](#casilla)
+   - [Pregunta](#pregunta)
+   - [Intento Correcto](#intento-correcto)
+   - [Intento Incorrecto](#intento-incorrecto)
+3. [Manejo de Errores](#manejo-de-errores)
 
-El servicio está construido con Flask y permite la comunicación a través de solicitudes HTTP.
+## Base URL
+http://localhost:2025
 
-## Endpoints y Ejemplos
+## Endpoints
 
 ### Usuario
 
 #### Obtener todos los usuarios
-**GET** `/usuario`
-
-**Respuesta:**
-```json
-[
+- **Método:** GET  
+- **URL:** `/usuario`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  [
     {
-        "idUsuario": 1,
-        "usuario": "Juan Perez",
-        "idEvento": 5
+      "idUsuario": 1,
+      "usuario": "valeria",
+      "idEvento": 1
     }
-]
-```
+  ]
+  ```
 
-#### Obtener un usuario por ID
-**GET** `/usuario/{id}`
-
-**Respuesta (200 OK):**
-```json
-{
+#### Obtener un usuario específico
+- **Método:** GET  
+- **URL:** `/usuario/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
     "idUsuario": 1,
-    "usuario": "Juan Perez",
-    "idEvento": 5
-}
-```
-
-**Respuesta (404 Not Found):**
-```json
-{
+    "usuario": "valeria",
+    "idEvento": 1
+  }
+  ```
+- **Respuesta si no existe (404 Not Found):**
+  ```json
+  {
     "mensaje": "Registro no encontrado"
-}
-```
+  }
+  ```
 
 #### Crear un usuario
-**POST** `/usuario`
-
-**Payload:**
-```json
-{
-    "usuario": "Maria Lopez",
-    "idEvento": 3
-}
-```
-
-**Respuesta:**
-```json
-{
+- **Método:** POST  
+- **URL:** `/usuario`  
+- **Payload:**
+  ```json
+  {
+    "usuario": "nombre_usuario",
+    "idEvento": 1
+  }
+  ```
+- **Respuesta exitosa (201 Created):**
+  ```json
+  {
     "mensaje": "Usuario creado"
-}
-```
+  }
+  ```
+- **Error si el evento no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "El evento especificado no existe"
+  }
+  ```
 
 #### Actualizar un usuario
-**PUT** `/usuario/{id}`
-
-**Payload:**
-```json
-{
-    "usuario": "Carlos Garcia",
-    "idEvento": 2
-}
-```
-
-**Respuesta:**
-```json
-{
+- **Método:** PUT  
+- **URL:** `/usuario/<int:id>`  
+- **Payload:**
+  ```json
+  {
+    "usuario": "nuevo_nombre",
+    "idEvento": 1
+  }
+  ```
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
     "mensaje": "Usuario actualizado"
-}
-```
+  }
+  ```
+- **Error si el evento no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "El evento especificado no existe"
+  }
+  ```
 
 #### Eliminar un usuario
-**DELETE** `/usuario/{id}`
-
-**Respuesta:**
-```json
-{
+- **Método:** DELETE  
+- **URL:** `/usuario/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
     "mensaje": "Usuario eliminado"
-}
-```
-
----
+  }
+  ```
 
 ### Boleto
 
 #### Obtener todos los boletos
-**GET** `/boleto`
-
-**Respuesta:**
-```json
-[
+- **Método:** GET  
+- **URL:** `/boleto`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  [
     {
-        "idBoleto": 1,
-        "tipo": "VIP",
-        "idUsuario": 2
+      "idBoleto": 1,
+      "tipo": false,
+      "idUsuario": 1
     }
-]
-```
+  ]
+  ```
 
-#### Obtener un boleto por ID
-**GET** `/boleto/{id}`
-
-**Respuesta:**
-```json
-{
+#### Obtener un boleto específico
+- **Método:** GET  
+- **URL:** `/boleto/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
     "idBoleto": 1,
-    "tipo": "VIP",
-    "idUsuario": 2
-}
-```
-
-#### Crear un boleto
-**POST** `/boleto`
-
-**Payload:**
-```json
-{
-    "tipo": "General",
-    "idUsuario": 3
-}
-```
-
-**Respuesta:**
-```json
-{
-    "mensaje": "Boleto creado"
-}
-```
-
-#### Actualizar un boleto
-**PUT** `/boleto/{id}`
-
-**Payload:**
-```json
-{
-    "tipo": "Platino",
+    "tipo": false,
     "idUsuario": 1
-}
-```
-
-**Respuesta:**
-```json
-{
-    "mensaje": "Boleto actualizado"
-}
-```
-
-#### Eliminar un boleto
-**DELETE** `/boleto/{id}`
-
-**Respuesta:**
-```json
-{
-    "mensaje": "Boleto eliminado"
-}
-```
-
----
+  }
+  ```
 
 ### Evento
 
 #### Obtener todos los eventos
-**GET** `/evento`
-
-**Respuesta:**
-```json
-[
+- **Método:** GET  
+- **URL:** `/evento`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  [
     {
-        "idEvento": 1,
-        "fechaInicio": "2024-06-01",
-        "fechaFinal": "2024-06-05"
+      "idEvento": 1,
+      "fechaInicio": "2006-05-08T03:05:15",
+      "fechaFinal": "2006-05-08T03:05:15"
     }
-]
-```
+  ]
+  ```
 
-#### Obtener un evento por ID
-**GET** `/evento/{id}`
+### Imagen
 
-**Respuesta:**
-```json
-{
-    "idEvento": 1,
-    "fechaInicio": "2024-06-01",
-    "fechaFinal": "2024-06-05"
-}
-```
+#### Obtener todas las imágenes
+- **Método:** GET  
+- **URL:** `/imagen`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  [
+    {
+      "idImagen": 1,
+      "URL": "jsfhsrhfkjdhfkjhdkj",
+      "estado": false,
+      "respuesta": "jshfu",
+      "idEvento": 1,
+      "idUsuario": null
+    }
+  ]
+  ```
 
-#### Crear un evento
-**POST** `/evento`
+### Casilla
 
-**Payload:**
-```json
-{
-    "fechaInicio": "2024-07-10",
-    "fechaFinal": "2024-07-15"
-}
-```
+#### Crear una casilla
+- **Método:** POST  
+- **URL:** `/casilla`  
+- **Payload:**
+  ```json
+  {
+    "idImagen": 1,
+    "coordenadaX": 23,
+    "coordenadaY": 43,
+    "idPregunta": 1
+  }
+  ```
 
-**Respuesta:**
-```json
-{
-    "mensaje": "Evento creado"
-}
-```
+### Pregunta
 
-#### Actualizar un evento
-**PUT** `/evento/{id}`
+#### Crear una pregunta
+- **Método:** POST  
+- **URL:** `/pregunta`  
+- **Payload:**
+  ```json
+  {
+    "pregunta": "¿Cuál es la capital de Francia?",
+    "opcionA": "Madrid",
+    "opcionB": "París",
+    "opcionC": "Berlín",
+    "opcionD": "Roma",
+    "respuesta": "opcionB"
+  }
+  ```
 
-**Payload:**
-```json
-{
-    "fechaInicio": "2024-08-01",
-    "fechaFinal": "2024-08-05"
-}
-```
+## Manejo de Errores
 
-**Respuesta:**
-```json
-{
-    "mensaje": "Evento actualizado"
-}
-```
+### Errores Comunes
+- **404 Not Found:** Cuando un recurso no existe.
+- **400 Bad Request:** Cuando los datos proporcionados son inválidos o faltan campos requeridos.
 
-#### Eliminar un evento
-**DELETE** `/evento/{id}`
+### Errores por Relaciones en Base de Datos
+La API verifica las relaciones antes de realizar operaciones para evitar violaciones de integridad:
 
-**Respuesta:**
-```json
-{
-    "mensaje": "Evento eliminado"
-}
-```
+- No se puede crear/actualizar un Usuario con un `idEvento` inexistente.
+- No se puede crear/actualizar un Boleto con un `idUsuario` inexistente.
+- No se puede eliminar un Evento si hay Usuarios o Imágenes que lo referencian.
+- No se puede eliminar un Usuario si hay Boletos, Imágenes o Intentos que lo referencian.
 
----
-
-## Notas adicionales
-- Todas las respuestas siguen el formato JSON.
-- En los métodos `POST` y `PUT`, se deben enviar los datos en formato JSON en el cuerpo de la solicitud.
-- Las claves primarias (`idUsuario`, `idBoleto`, `idEvento`, etc.) deben ser valores enteros.
-- Se recomienda manejar los errores y validar las respuestas del API en el cliente.
-
-## Autenticación y Seguridad
-Este servicio no cuenta con autenticación ni autorización implementadas. Se recomienda integrar JWT o alguna otra estrategia de autenticación para su uso en producción.
-
+En todos estos casos, la API devolverá un error `400 Bad Request` con un mensaje descriptivo del problema.
