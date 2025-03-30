@@ -1,6 +1,6 @@
-# Servicios Web CRUD para tabla en MSSQLServer
+# Servicios Web CRUD para revelacion de imagen
 
-Este repositorio contiene un ejercicio de conexión a una instancia de **SQL Server** que corre dentro de un contenedor Docker en **GitHub Codespaces** utilizando el paquete **pymssql** para Python.
+Este repositorio contiene los servicios web CRUD de la base de datos diseñada para Lienzo, además de el archivo que inicia y crea las tablas correspondientes a la base de datos. Se incluyen datos de prueba para la demostración de su funcionamiento. En caso de no necesitarlos, su eliminación no afectará el funcionamiento.
 
 ## Prerequisitos
 
@@ -27,17 +27,19 @@ sudo apt install mssql-tools unixodbc-dev
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 source ~/.bashrc
 ```
-### Usar sqlcmd para conectarse desde la terminal
+### Usar sqlcmd para inicializar la base de datos con las tablas y datos desde la terminal.
 ```sh
-sqlcmd -S localhost -U sa -P YourPassword123!
+sqlcmd -S localhost -U sa -P YourPassword123! -i init_db.sql
 ```
 
 # Probar servicios web
 
 ## Prerequisitos
 
-- Se ejecutó previamente el programa *PythonSQLServerCrearTabla.py*, donde se creó la tabla y se agregaron los registros
-
+- Se ejecutó el comando que lee el archivo sql:
+```sh
+sqlcmd -S localhost -U sa -P YourPassword123! -i init_db.sql
+```
 
 ### Ejecución de servidor de servicios web
 
@@ -47,24 +49,5 @@ Ejecuta el siguiente comando en la terminal de tu **GitHub Codespace**:
 cd web\ services/
 python CRUDServer.py
 
-```
-
-### Ejecución de cliente en Python que consume servicios
-
-Abra **otra** terminal (no cierre la terminal que está ejecutando el servidor), y ejecute el siguiente comando:
-```sh
-cd web\ services/
-python testWS.py
-```
-
-### Correr servidor web
-Modifique la siguiente línea en *index.html* para actualizar la dirección correcta de los servicios web
-```JavaScript
-const apiUrl = "http://localhost:2025/test";
-```
-
-De nuevo, abra **otra** terminal (no cierre la terminal que está ejecutando el servidor), y ejecute el siguiente comando:
-```sh
-python -m http.server 5500 --directory static
 ```
 
