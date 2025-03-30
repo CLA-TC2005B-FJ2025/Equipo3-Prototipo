@@ -163,19 +163,19 @@ ALTER TABLE `Imagen` ADD FOREIGN KEY (idUsuario) REFERENCES `Usuario` (`idUsuari
 -- Test Data
 -- ---
 
--- INSERT INTO `Usuario` (`idUsuario`,`usuario`,`idEvento`) VALUES
--- ('','','');
--- INSERT INTO `Boleto` (`idBoleto`,`tipo`,`idUsuario`) VALUES
--- ('','','');
--- INSERT INTO `Casilla` (`idCasilla`,`idImagen`,`coordenadaX`,`coordenadaY`,`idPregunta`) VALUES
--- ('','','','','');
--- INSERT INTO `Pregunta` (`idPregunta`,`pregunta`,`opcionA`,`opcionB`,`opcionC`,`opcionD`,`respuesta`) VALUES
--- ('','','','','','','');
--- INSERT INTO `IntentoCorrecto` (`idCorrecto`,`idUsuario`,`idCasilla`,`idImagen`) VALUES
--- ('','','','');
--- INSERT INTO `IntentoIncorrecto` (`idIncorrecto`,`opcionElegida`,`idUsuario`,`idCasilla`,`idImagen`) VALUES
--- ('','','','','');
--- INSERT INTO `Evento` (`idEvento`,`fechaInicio`,`fechaFinal`) VALUES
--- ('','','');
--- INSERT INTO `Imagen` (`idImagen`,`URL`,`estado`,`respuesta`,`idEvento`,`idUsuario`) VALUES
--- ('','','','','','');
+INSERT INTO `Usuario` (`idUsuario`,`usuario`,`idEvento`) VALUES
+('1','valeria','1');
+INSERT INTO `Boleto` (`idBoleto`,`tipo`,`idUsuario`) VALUES
+('1','0','1');
+INSERT INTO `Casilla` (`idCasilla`,`idImagen`,`coordenadaX`,`coordenadaY`,`idPregunta`) VALUES
+('1','1','23','43','1');
+INSERT INTO `Pregunta` (`idPregunta`,`pregunta`,`opcionA`,`opcionB`,`opcionC`,`opcionD`,`respuesta`) VALUES
+('1','hola','e','r','v','s','opcionA');
+INSERT INTO `IntentoCorrecto` (`idCorrecto`,`idUsuario`,`idCasilla`,`idImagen`) VALUES
+('1','1','1','1');
+INSERT INTO `IntentoIncorrecto` (`idIncorrecto`,`opcionElegida`,`idUsuario`,`idCasilla`,`idImagen`) VALUES
+('1','opcionB','1','1','1');
+INSERT INTO `Evento` (`idEvento`,`fechaInicio`,`fechaFinal`) VALUES
+('1','08/05/2006 03:05:15','08/05/2006 03:05:15');
+INSERT INTO `Imagen` (`idImagen`,`URL`,`estado`,`respuesta`,`idEvento`,`idUsuario`) VALUES
+('1','jsfhsrhfkjdhfkjhdkj','0','jshfu','1','');
