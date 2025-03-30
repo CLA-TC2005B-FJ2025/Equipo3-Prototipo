@@ -275,7 +275,6 @@ http://localhost:2025
     "mensaje": "Evento eliminado"
   }
   ```
----
 
 ### Imagen
 
@@ -382,6 +381,94 @@ http://localhost:2025
     "mensaje": "Imagen eliminada"
   }
   ```
+---
+### IntentoIncorrecto
+
+#### Obtener todos los intentos incorrectos
+- **Método:** GET  
+- **URL:** `/intentoIncorrecto`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  [
+    {
+      "idIncorrecto": 1,
+      "opcionElegida": "A",
+      "idUsuario": 2,
+      "idCasilla": 3,
+      "idImagen": 5
+    }
+  ]
+  ```
+
+#### Obtener un intento incorrecto específico
+- **Método:** GET  
+- **URL:** `/intentoIncorrecto/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "idIncorrecto": 1,
+    "opcionElegida": "A",
+    "idUsuario": 2,
+    "idCasilla": 3,
+    "idImagen": 5
+  }
+  ```
+- **Respuesta si no existe (404 Not Found):**
+  ```json
+  {
+    "mensaje": "Registro no encontrado"
+  }
+  ```
+
+#### Crear un intento incorrecto
+- **Método:** POST  
+- **URL:** `/intentoIncorrecto`  
+- **Payload:**
+  ```json
+  {
+    "opcionElegida": "A",
+    "idUsuario": 2,
+    "idCasilla": 3,
+    "idImagen": 5
+  }
+  ```
+- **Respuesta exitosa (201 Created):**
+  ```json
+  {
+    "mensaje": "IntentoIncorrecto registrado"
+  }
+  ```
+- **Error si el usuario no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "El usuario especificado no existe"
+  }
+  ```
+- **Error si la casilla no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "La casilla especificada no existe"
+  }
+  ```
+- **Error si la imagen no existe (400 Bad Request):**
+  ```json
+  {
+    "mensaje": "La imagen especificada no existe"
+  }
+  ```
+
+#### Eliminar un intento incorrecto
+- **Método:** DELETE  
+- **URL:** `/intentoIncorrecto/<int:id>`  
+- **Respuesta exitosa (200 OK):**
+  ```json
+  {
+    "mensaje": "IntentoIncorrecto eliminado"
+  }
+  ```
+
+
+---
 ## Manejo de Errores
 
 ### Errores Comunes
