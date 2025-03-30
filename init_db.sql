@@ -1,181 +1,126 @@
--- ---
--- Globals
--- ---
-
--- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
--- SET FOREIGN_KEY_CHECKS=0;
-
--- ---
 -- Table 'Usuario'
--- 
--- ---
+DROP TABLE IF EXISTS IntentoIncorrecto;
+DROP TABLE IF EXISTS IntentoCorrecto;
+DROP TABLE IF EXISTS Boleto;
+DROP TABLE IF EXISTS Imagen;
+DROP TABLE IF EXISTS Usuario;
+DROP TABLE IF EXISTS Casilla;
+DROP TABLE IF EXISTS Evento;
+DROP TABLE IF EXISTS Pregunta;
 
-DROP TABLE IF EXISTS `Usuario`;
-		
-CREATE TABLE `Usuario` (
-  `idUsuario` INTEGER(5) NOT NULL AUTO_INCREMENT,
-  `usuario` VARCHAR(50) NOT NULL,
-  `idEvento` INTEGER(5) NOT NULL,
-  PRIMARY KEY (`idUsuario`)
+
+-- DROP TABLE IF EXISTS Usuario;
+CREATE TABLE Usuario (
+  idUsuario INT IDENTITY(1,1) PRIMARY KEY,
+  usuario VARCHAR(50) NOT NULL,
+  idEvento INT NOT NULL
 );
 
--- ---
 -- Table 'Boleto'
--- 
--- ---
-
-DROP TABLE IF EXISTS `Boleto`;
-		
-CREATE TABLE `Boleto` (
-  `idBoleto` INTEGER(5) NOT NULL AUTO_INCREMENT,
-  `tipo` BINARY(1) NOT NULL,
-  `idUsuario` INTEGER(5) NOT NULL,
-  PRIMARY KEY (`idBoleto`)
+-- DROP TABLE IF EXISTS Boleto;
+CREATE TABLE Boleto (
+  idBoleto INT IDENTITY(1,1) PRIMARY KEY,
+  tipo BIT NOT NULL,
+  idUsuario INT NOT NULL
 );
 
--- ---
 -- Table 'Casilla'
--- 
--- ---
-
-DROP TABLE IF EXISTS `Casilla`;
-		
-CREATE TABLE `Casilla` (
-  `idCasilla` INTEGER(5) NOT NULL AUTO_INCREMENT,
-  `idImagen` INTEGER(5) NOT NULL,
-  `coordenadaX` INTEGER(6) NOT NULL,
-  `coordenadaY` INTEGER(6) NOT NULL,
-  `idPregunta` INTEGER(5) NOT NULL,
-  PRIMARY KEY (`idCasilla`),
-  PRIMARY KEY (`idImagen`)
+--DROP TABLE IF EXISTS Casilla;
+CREATE TABLE Casilla (
+  idCasilla INT NOT NULL,
+  idImagen INT NOT NULL,
+  coordenadaX INT NOT NULL,
+  coordenadaY INT NOT NULL,
+  idPregunta INT NOT NULL,
+  PRIMARY KEY (idCasilla, idImagen) -- Clave primaria compuesta
 );
 
--- ---
 -- Table 'Pregunta'
--- 
--- ---
-
-DROP TABLE IF EXISTS `Pregunta`;
-		
-CREATE TABLE `Pregunta` (
-  `idPregunta` INTEGER(5) NOT NULL AUTO_INCREMENT,
-  `pregunta` VARCHAR(200) NOT NULL,
-  `opcionA` VARCHAR(50) NULL,
-  `opcionB` VARCHAR(50) NULL,
-  `opcionC` VARCHAR(50) NULL,
-  `opcionD` VARCHAR NULL,
-  `respuesta` VARCHAR(7) NOT NULL,
-  PRIMARY KEY (`idPregunta`)
+--DROP TABLE IF EXISTS Pregunta;
+CREATE TABLE Pregunta (
+  idPregunta INT IDENTITY(1,1) PRIMARY KEY,
+  pregunta VARCHAR(200) NOT NULL,
+  opcionA VARCHAR(50),
+  opcionB VARCHAR(50),
+  opcionC VARCHAR(50),
+  opcionD VARCHAR(50),
+  respuesta VARCHAR(7) NOT NULL
 );
 
--- ---
 -- Table 'IntentoCorrecto'
--- 
--- ---
-
-DROP TABLE IF EXISTS `IntentoCorrecto`;
-		
-CREATE TABLE `IntentoCorrecto` (
-  `idCorrecto` INTEGER(5) NOT NULL AUTO_INCREMENT,
-  `idUsuario` INTEGER(5) NOT NULL,
-  `idCasilla` INTEGER(5) NOT NULL,
-  `idImagen` INTEGER(5) NOT NULL,
-  PRIMARY KEY (`idCorrecto`)
+--DROP TABLE IF EXISTS IntentoCorrecto;
+CREATE TABLE IntentoCorrecto (
+  idCorrecto INT IDENTITY(1,1) PRIMARY KEY,
+  idUsuario INT NOT NULL,
+  idCasilla INT NOT NULL,
+  idImagen INT NOT NULL
 );
 
--- ---
 -- Table 'IntentoIncorrecto'
--- 
--- ---
-
-DROP TABLE IF EXISTS `IntentoIncorrecto`;
-		
-CREATE TABLE `IntentoIncorrecto` (
-  `idIncorrecto` INTEGER(5) NOT NULL AUTO_INCREMENT,
-  `opcionElegida` VARCHAR(7) NOT NULL,
-  `idUsuario` INTEGER(5) NOT NULL,
-  `idCasilla` INTEGER(5) NOT NULL,
-  `idImagen` INTEGER(5) NOT NULL,
-  PRIMARY KEY (`idIncorrecto`)
+--DROP TABLE IF EXISTS IntentoIncorrecto;
+CREATE TABLE IntentoIncorrecto (
+  idIncorrecto INT IDENTITY(1,1) PRIMARY KEY,
+  opcionElegida VARCHAR(7) NOT NULL,
+  idUsuario INT NOT NULL,
+  idCasilla INT NOT NULL,
+  idImagen INT NOT NULL
 );
 
--- ---
 -- Table 'Evento'
--- 
--- ---
-
-DROP TABLE IF EXISTS `Evento`;
-		
-CREATE TABLE `Evento` (
-  `idEvento` INTEGER(5) NOT NULL AUTO_INCREMENT,
-  `fechaInicio` DATETIME NOT NULL,
-  `fechaFinal` DATETIME NOT NULL,
-  PRIMARY KEY (`idEvento`)
+--DROP TABLE IF EXISTS Evento;
+CREATE TABLE Evento (
+  idEvento INT IDENTITY(1,1) PRIMARY KEY,
+  fechaInicio DATETIME NOT NULL,
+  fechaFinal DATETIME NOT NULL
 );
 
--- ---
 -- Table 'Imagen'
--- 
--- ---
-
-DROP TABLE IF EXISTS `Imagen`;
-		
-CREATE TABLE `Imagen` (
-  `idImagen` INTEGER(5) NOT NULL AUTO_INCREMENT,
-  `URL` VARCHAR(200) NOT NULL,
-  `estado` BINARY(1) NOT NULL,
-  `respuesta` VARCHAR(50) NOT NULL,
-  `idEvento` INTEGER(5) NOT NULL,
-  `idUsuario` INTEGER(5),
-  PRIMARY KEY (`idImagen`)
+--DROP TABLE IF EXISTS Imagen;
+CREATE TABLE Imagen (
+  idImagen INT IDENTITY(1,1) PRIMARY KEY,
+  URL VARCHAR(200) NOT NULL,
+  estado BIT NOT NULL,
+  respuesta VARCHAR(50) NOT NULL,
+  idEvento INT NOT NULL,
+  idUsuario INT
 );
 
--- ---
--- Foreign Keys 
--- ---
+-- Foreign Keys
+ALTER TABLE Usuario ADD FOREIGN KEY (idEvento) REFERENCES Evento (idEvento);
+ALTER TABLE Boleto ADD FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario);
+ALTER TABLE Casilla ADD FOREIGN KEY (idPregunta) REFERENCES Pregunta (idPregunta);
+ALTER TABLE IntentoCorrecto ADD FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario);
+ALTER TABLE IntentoCorrecto ADD FOREIGN KEY (idCasilla, idImagen) REFERENCES Casilla (idCasilla, idImagen);
+-- ALTER TABLE IntentoCorrecto ADD FOREIGN KEY (idImagen) REFERENCES Imagen (idImagen);
+ALTER TABLE IntentoIncorrecto ADD FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario);
+ALTER TABLE IntentoIncorrecto ADD FOREIGN KEY (idCasilla, idImagen) REFERENCES Casilla (idCasilla, idImagen);
+-- ALTER TABLE IntentoIncorrecto ADD FOREIGN KEY (idImagen) REFERENCES Imagen (idImagen);
+ALTER TABLE Imagen ADD FOREIGN KEY (idEvento) REFERENCES Evento (idEvento);
+ALTER TABLE Imagen ADD FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario);
 
-ALTER TABLE `Usuario` ADD FOREIGN KEY (idEvento) REFERENCES `Evento` (`idEvento`);
-ALTER TABLE `Boleto` ADD FOREIGN KEY (idUsuario) REFERENCES `Usuario` (`idUsuario`);
-ALTER TABLE `Casilla` ADD FOREIGN KEY (idPregunta) REFERENCES `Pregunta` (`idPregunta`);
-ALTER TABLE `IntentoCorrecto` ADD FOREIGN KEY (idUsuario) REFERENCES `Usuario` (`idUsuario`);
-ALTER TABLE `IntentoCorrecto` ADD FOREIGN KEY (idCasilla) REFERENCES `Casilla` (`idCasilla`);
-ALTER TABLE `IntentoCorrecto` ADD FOREIGN KEY (idImagen) REFERENCES `Casilla` (`idImagen`);
-ALTER TABLE `IntentoIncorrecto` ADD FOREIGN KEY (idUsuario) REFERENCES `Usuario` (`idUsuario`);
-ALTER TABLE `IntentoIncorrecto` ADD FOREIGN KEY (idCasilla) REFERENCES `Casilla` (`idCasilla`);
-ALTER TABLE `IntentoIncorrecto` ADD FOREIGN KEY (idImagen) REFERENCES `Casilla` (`idImagen`);
-ALTER TABLE `Imagen` ADD FOREIGN KEY (idEvento) REFERENCES `Evento` (`idEvento`);
-ALTER TABLE `Imagen` ADD FOREIGN KEY (idUsuario) REFERENCES `Usuario` (`idUsuario`);
 
--- ---
--- Table Properties
--- ---
+--Datos dummy
+INSERT INTO Evento (fechaInicio, fechaFinal) VALUES
+('2006-05-08 03:05:15', '2006-05-08 03:05:15');
 
--- ALTER TABLE `Usuario` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `Boleto` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `Casilla` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `Pregunta` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `IntentoCorrecto` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `IntentoIncorrecto` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `Evento` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `Imagen` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+INSERT INTO Imagen (URL, estado, respuesta, idEvento, idUsuario) VALUES
+('jsfhsrhfkjdhfkjhdkj', 0, 'jshfu', 1, NULL);
 
--- ---
--- Test Data
--- ---
+INSERT INTO Usuario (usuario, idEvento) VALUES
+('valeria', 1);
 
-INSERT INTO `Usuario` (`idUsuario`,`usuario`,`idEvento`) VALUES
-('1','valeria','1');
-INSERT INTO `Boleto` (`idBoleto`,`tipo`,`idUsuario`) VALUES
-('1','0','1');
-INSERT INTO `Casilla` (`idCasilla`,`idImagen`,`coordenadaX`,`coordenadaY`,`idPregunta`) VALUES
-('1','1','23','43','1');
-INSERT INTO `Pregunta` (`idPregunta`,`pregunta`,`opcionA`,`opcionB`,`opcionC`,`opcionD`,`respuesta`) VALUES
-('1','hola','e','r','v','s','opcionA');
-INSERT INTO `IntentoCorrecto` (`idCorrecto`,`idUsuario`,`idCasilla`,`idImagen`) VALUES
-('1','1','1','1');
-INSERT INTO `IntentoIncorrecto` (`idIncorrecto`,`opcionElegida`,`idUsuario`,`idCasilla`,`idImagen`) VALUES
-('1','opcionB','1','1','1');
-INSERT INTO `Evento` (`idEvento`,`fechaInicio`,`fechaFinal`) VALUES
-('1','08/05/2006 03:05:15','08/05/2006 03:05:15');
-INSERT INTO `Imagen` (`idImagen`,`URL`,`estado`,`respuesta`,`idEvento`,`idUsuario`) VALUES
-('1','jsfhsrhfkjdhfkjhdkj','0','jshfu','1','');
+INSERT INTO Boleto (tipo, idUsuario) VALUES
+(0, 1);
+
+INSERT INTO Pregunta (pregunta, opcionA, opcionB, opcionC, opcionD, respuesta) VALUES
+('hola', 'e', 'r', 'v', 's', 'opcionA');
+
+INSERT INTO Casilla (idCasilla, idImagen, coordenadaX, coordenadaY, idPregunta) VALUES
+(1, 1, 23, 43, 1);
+
+INSERT INTO IntentoCorrecto (idUsuario, idCasilla, idImagen) VALUES
+(1, 1, 1);
+
+INSERT INTO IntentoIncorrecto (opcionElegida, idUsuario, idCasilla, idImagen) VALUES
+('opcionB', 1, 1, 1);
+
