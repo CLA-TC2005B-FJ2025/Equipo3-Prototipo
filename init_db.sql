@@ -126,7 +126,7 @@ CREATE TABLE `Imagen` (
   `estado` BINARY(1) NOT NULL,
   `respuesta` VARCHAR(50) NOT NULL,
   `idEvento` INTEGER(5) NOT NULL,
-  `idUsuario` INTEGER(5) NOT NULL,
+  `idUsuario` INTEGER(5),
   PRIMARY KEY (`idImagen`)
 );
 
