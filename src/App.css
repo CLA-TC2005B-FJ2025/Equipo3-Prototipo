@@ -16,7 +16,7 @@ body {
   
   .grid-item {
     /* Reemplaza 'path-to-your-image.jpg' con la ruta de tu imagen */
-    background: url('path-to-your-image.jpg') no-repeat center center;
+    background: url('/src/components/imagenes/hqdefault.jpg') no-repeat center center;
     background-size: cover;
     height: 50px;
     cursor: pointer;
