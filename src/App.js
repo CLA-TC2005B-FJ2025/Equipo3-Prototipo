@@ -1,28 +1,55 @@
 import React, { useState } from 'react';
-import Grid from './components/Grid';
-import Modal from './components/Modal';
+import Popup from './Popup';
+import './Popup.css'; // Incluye los estilos del popup
 
 const App = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState(null);
+  const [popupMode, setPopupMode] = useState(null); // 'question', 'correct', 'incorrect'
+  const [popupData, setPopupData] = useState(null);
 
-  // Función para manejar el clic en una celda de la cuadrícula
-  const handleGridItemClick = (data) => {
-    setModalData(data);
-    setShowModal(true);
+  const handleOpenQuestion = () => {
+    setPopupMode('question');
+    setPopupData({
+      timer: '00:30',
+      question: '¿De qué color es la piel de los osos polares?',
+      options: [
+        { option: 'A', text: 'Blanca' },
+        { option: 'B', text: 'Rosa' },
+        { option: 'C', text: 'Amarilla' },
+        { option: 'D', text: 'Negra' },
+      ]
+    });
   };
 
-  // Función para cerrar el modal
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setModalData(null);
+  const handleAnswer = (answer) => {
+    // Simula lógica de validación
+    const isCorrect = answer.option === 'D';
+
+    setPopupMode(isCorrect ? 'correct' : 'incorrect');
+    setPopupData({
+      option: answer.option,
+      text: answer.text,
+    });
+  };
+
+  const closePopup = () => {
+    setPopupMode(null);
+    setPopupData(null);
   };
 
   return (
-    <div>
-      <Grid onItemClick={handleGridItemClick} />
-      {showModal && modalData && (
-        <Modal data={modalData} onClose={handleCloseModal} />
+    <div className="App">
+      <h1 style={{ textAlign: 'center', marginTop: '2rem' }}>Demo de Pop-up de Pregunta</h1>
+      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+        <button onClick={handleOpenQuestion}>Abrir pregunta</button>
+      </div>
+
+      {popupMode && (
+        <Popup
+          mode={popupMode}
+          data={popupData}
+          onClose={closePopup}
+          onAnswer={handleAnswer}
+        />
       )}
     </div>
   );

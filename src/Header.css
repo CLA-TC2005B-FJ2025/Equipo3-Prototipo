@@ -1,0 +1,19 @@
+.header {
+    background-color: var(--main-red);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+  }
+  
+  .logo img {
+    height: 40px;
+    cursor: pointer;
+  }
+  
+  .user-icon {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--white);
+  }
+  
