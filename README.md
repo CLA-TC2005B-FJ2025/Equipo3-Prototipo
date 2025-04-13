@@ -21,5 +21,5 @@ npm install
 npm start
 ```
 
-### Recuerda hacer público el puerto correspondiente. 
+Recuerda hacer público el puerto correspondiente. 
 
