@@ -25,9 +25,11 @@ const Popup = ({ mode, data, onClose, onAnswer }) => {
       case 'correct':
         return (
           <>
+          
             <h2>¡Correcto!</h2>
             <p>Un boleto se ha añadido a tu perfil</p>
             <div className="answer-box correct">
+            
               <span className="option-letter">{data.option}</span> {data.text}
             </div>
             <button className="btn-return" onClick={onClose}>Volver</button>

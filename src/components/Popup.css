@@ -1,0 +1,162 @@
+
+.popup-close {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: transparent;
+  border: none;
+  color: var(--white);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+  /* Popup.css */
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  font-family: 'Poppins', sans-serif;
+}
+
+.popup {
+  background-color: #4a2424; /* marrón oscuro del fondo */
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+  text-align: center;
+}
+
+.timer {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.popup-content h2 {
+  background-color: #f1f1f5;
+  color: #000;
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.answers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.answer-btn {
+  background-color: #f1f1f5;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 1rem;
+  color: #000;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.answer-btn:hover {
+  transform: scale(1.02);
+}
+
+.option {
+  display: inline-block;
+  background-color: #ccc;
+  color: #fff;
+  border-radius: 50%;
+  font-weight: bold;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+  font-size: 1rem;
+}
+
+/* Colores específicos por opción */
+.option-a { background-color: #ff4b4b; } /* Rojo */
+.option-b { background-color: #fcbf3d; } /* Amarillo naranja */
+.option-c { background-color: #3ec16d; } /* Verde */
+.option-d { background-color: #3b83f6; } /* Azul */
+
+/* Correcto/Incorrecto estilos */
+.answer-box {
+  margin: 1rem auto;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #000;
+  width: 100%;
+  background-color: #f1f1f5;
+}
+
+.answer-box.correct {
+  background-color: #3ec16d;
+  color: rgb(0, 0, 0);
+}
+.answer-box.correct .option-letter {
+  background-color: #ccc;
+  color: white;
+}
+.answer-box.incorrect {
+  background-color: #ff4b4b;
+  color: rgb(0, 0, 0);
+}
+.answer-box.incorrect .option-letter {
+  background-color: #ccc;
+  color: white;
+}
+
+.option-letter {
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 32px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.btn-return {
+  margin-top: 1.5rem;
+  background-color: #fff;
+  color: #4a2424;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-return:hover {
+  background-color: #f2f2f2;
+}

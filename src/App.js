@@ -1,47 +1,13 @@
-import React, { useState } from 'react';
-import Popup from './Popup';
-import './Popup.css'; // Incluye los estilos del popup
+import usePopup from './hooks/usePopup';
+import Popup from './components/Popup';
 
 const App = () => {
-  const [popupMode, setPopupMode] = useState(null); // 'question', 'correct', 'incorrect'
-  const [popupData, setPopupData] = useState(null);
-
-  const handleOpenQuestion = () => {
-    setPopupMode('question');
-    setPopupData({
-      timer: '00:30',
-      question: '¿De qué color es la piel de los osos polares?',
-      options: [
-        { option: 'A', text: 'Blanca' },
-        { option: 'B', text: 'Rosa' },
-        { option: 'C', text: 'Amarilla' },
-        { option: 'D', text: 'Negra' },
-      ]
-    });
-  };
-
-  const handleAnswer = (answer) => {
-    // Simula lógica de validación
-    const isCorrect = answer.option === 'D';
-
-    setPopupMode(isCorrect ? 'correct' : 'incorrect');
-    setPopupData({
-      option: answer.option,
-      text: answer.text,
-    });
-  };
-
-  const closePopup = () => {
-    setPopupMode(null);
-    setPopupData(null);
-  };
+  const { popupMode, popupData, openQuestion, handleAnswer, closePopup } = usePopup();
 
   return (
     <div className="App">
-      <h1 style={{ textAlign: 'center', marginTop: '2rem' }}>Demo de Pop-up de Pregunta</h1>
-      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-        <button onClick={handleOpenQuestion}>Abrir pregunta</button>
-      </div>
+      <h1>Demo de Pop-up</h1>
+      <button onClick={openQuestion}>Abrir pregunta</button>
 
       {popupMode && (
         <Popup
@@ -54,5 +20,4 @@ const App = () => {
     </div>
   );
 };
-
 export default App;
