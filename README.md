@@ -1,6 +1,6 @@
 # Este repositorio es una extensión del repositorio original "CRUD_Server_Equipo_3"
 
-En este segundo repositorio se aloja el frontend del proyedto del Equipo3, desarrollado en REACT, que consume servicios web alojados en el repositorio CRUD_Server_Equipo_3.
+En este segundo repositorio se aloja el frontend del proyecto del Equipo3, desarrollado en REACT, que consume servicios web alojados en el repositorio CRUD_Server_Equipo_3.
 
 ## Prerequisitos
 
