@@ -2,7 +2,7 @@ import usePopup from './hooks/usePopup';
 import Popup from './components/Popup';
 
 const App = () => {
-  const { popupMode, popupData, openQuestion, handleAnswer, closePopup } = usePopup();
+  const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
 
   return (
     <div className="App">
@@ -12,7 +12,7 @@ const App = () => {
       {popupMode && (
         <Popup
           mode={popupMode}
-          data={popupData}
+          data={{ ...popupData, timeLeft}}
           onClose={closePopup}
           onAnswer={handleAnswer}
         />

@@ -9,7 +9,7 @@ const Popup = ({ mode, data, onClose, onAnswer }) => {
           <>
             <h2>{data.question}</h2>
             <div className="answers-grid">
-              {data.options.map(opt => (
+              {Array.isArray(data.options) && data.options.map(opt => (
                 <button
                   key={opt.option}
                   onClick={() => onAnswer(opt)}
@@ -61,11 +61,11 @@ const Popup = ({ mode, data, onClose, onAnswer }) => {
       <div className="popup">
         <button className="popup-close" onClick={onClose}>✖</button>
         <div className="popup-content">
-          {mode === 'question' && (
-            <div className="timer">
-              <span role="img" aria-label="timer">⏰</span> {data.timer}
-            </div>
-          )}
+        {mode === 'question' && typeof data.timeLeft !== 'undefined' && (
+          <div className="timer">
+            <span role="img" aria-label="timer">⏰</span> 00:{data.timeLeft}s
+          </div>
+        )}
           {renderContent()}
         </div>
       </div>
