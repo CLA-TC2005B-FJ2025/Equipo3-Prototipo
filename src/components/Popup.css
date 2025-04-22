@@ -80,10 +80,6 @@
   transition: transform 0.2s ease;
 }
 
-.answer-btn:hover {
-  transform: scale(1.02);
-}
-
 .option {
   display: inline-block;
   background-color: #ccc;
@@ -98,10 +94,35 @@
 }
 
 /* Colores específicos por opción */
-.option-a { background-color: #ff4b4b; } /* Rojo */
+.option-a { background-color: #ff0505; } /* Rojo */
 .option-b { background-color: #fcbf3d; } /* Amarillo naranja */
 .option-c { background-color: #3ec16d; } /* Verde */
 .option-d { background-color: #3b83f6; } /* Azul */
+
+
+.answer-btn.option-a:hover {
+  transform: scale(1.02);
+  opacity: 0.8;
+  background-color: #ff0505; 
+}
+
+.answer-btn.option-b:hover {
+  transform: scale(1.02);
+  opacity: 0.8;
+  background-color: #fcbf3d;
+}
+
+.answer-btn.option-c:hover {
+  transform: scale(1.02);
+  opacity: 0.8;
+  background-color: #3ec16d;
+}
+
+.answer-btn.option-d:hover {
+  transform: scale(1.02);
+  opacity: 0.8;
+  background-color: #3b83f6;
+}
 
 /* Correcto/Incorrecto estilos */
 .answer-box {
