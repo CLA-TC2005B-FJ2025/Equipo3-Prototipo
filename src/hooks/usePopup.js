@@ -34,7 +34,7 @@ const usePopup = () => {
 
   const openQuestion = async () => {
     try {
-      const response = await fetch('https://cautious-chainsaw-g4q9949g46jpcv9rj-2025.app.github.dev/pregunta/1');
+      const response = await fetch('https://zany-space-broccoli-x5w6656j5xxpfv656-2025.app.github.dev/pregunta/1');
       const data = await response.json();
 
       setCorrectOption(data.correctOption);
