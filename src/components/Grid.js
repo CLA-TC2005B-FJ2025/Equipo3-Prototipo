@@ -1,13 +1,12 @@
 import React from 'react';
-import './Grid.css';      // Asegúrate de crear/importar el CSS
+import './Grid.css';
 
 const Grid = ({
-  side = 15,              // número de celdas por lado     (15×15)
-  size = 600,             // ancho/alto del tablero en px  (cuadrado)
-  bgImage = '/workspaces/Equipo3-Prototipo/src/assets/imagenes/hqdefault.jpg',
+  side = 15,
+  size = 600,
+  bgImage = '/img/tu-imagen.jpg',
   onItemClick
 }) => {
-
   const total = side * side;
   const cells = Array.from({ length: total }, (_, i) => i + 1);
 
@@ -15,7 +14,9 @@ const Grid = ({
     <div
       className="grid-container"
       style={{
+        '--side': side,
         width: size,
+        height: size,
         backgroundImage: `url(${bgImage})`
       }}
     >
@@ -23,7 +24,7 @@ const Grid = ({
         <div
           key={n}
           className="grid-item"
-          onClick={() => onItemClick?.(n)}
+          onClick={() => onItemClick(n)}
         >
           {n}
         </div>

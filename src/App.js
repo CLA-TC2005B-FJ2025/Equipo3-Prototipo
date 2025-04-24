@@ -1,41 +1,57 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import Header from './components/Header';
 import Grid from './components/Grid';
-import usePopup from './hooks/usePopup';
 import Popup from './components/Popup';
+import usePopup from './hooks/usePopup';
+import './index.css'; // tu CSS global
 
 const App = () => {
-  const {
-    popupMode, popupData,
-    openQuestion, handleAnswer,
-    closePopup, timeLeft
-  } = usePopup();
+  const [username, setUsername] = useState('Cienfuegos');
+  const navigate = useNavigate();
 
-  // Si además de un número necesitas saber el ID de la pregunta,
-  // puedes llevar un mapa número → pregunta desde tu backend o estado.
-  const handleCellClick = (num) => {
-    console.log(`Casilla ${num} clicada`);
-    openQuestion(num);  // por ejemplo, pasar el ID al hook
+  const handleLogout = () => {
+    // Limpia tokens, contexto, etc.
+    setUsername(null);
+    navigate('/login');
   };
+
+  const {
+    popupMode,
+    popupData,
+    openQuestion,
+    handleAnswer,
+    closePopup,
+    timeLeft
+  } = usePopup();
 
   return (
     <>
-      <h1>Cuadrícula + Pop-up</h1>
-      <Grid
-        onItemClick={handleCellClick}
-        bgImage="/workspaces/Equipo3-Prototipo/src/assets/imagenes/hqdefault.jpg"
-        size={600}
-        side={15}
-      />
+      <Header username={username} onLogout={handleLogout} />
 
-      {popupMode && (
-        <Popup
-          mode={popupMode}
-          data={{ ...popupData, timeLeft }}
-          onClose={closePopup}
-          onAnswer={handleAnswer}
+      <main style={{ padding: '1rem' }}>
+        <h1>Cuadrícula + Pop-up</h1>
+
+        <Grid
+          onItemClick={openQuestion}
+          bgImage="/img/mi-fondo.jpg"
+          size={600}
+          side={15}
         />
-      )}
+
+        {popupMode && (
+          <Popup
+            mode={popupMode}
+            data={{ ...popupData, timeLeft }}
+            onClose={closePopup}
+            onAnswer={handleAnswer}
+          />
+        )}
+      </main>
     </>
   );
 };
 
 export default App;
+

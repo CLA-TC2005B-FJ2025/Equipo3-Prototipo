@@ -9,7 +9,7 @@ const Header = ({ username, onLogout }) => {
   return (
     <header className="header">
       <div className="logo" onClick={() => navigate('/')}>
-        <img src="/lienzo-logo.png" alt="Lienzo Logo" />
+        <img src="/workspaces/Equipo3-Prototipo/src/assets/imagenes/LogoLienzo.jpg" alt="Lienzo Logo" />
       </div>
       <UserMenu username={username} onLogout={onLogout} />
     </header>

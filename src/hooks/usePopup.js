@@ -36,7 +36,7 @@ const usePopup = () => {
 
   const openQuestion = async () => {
     try {
-      const response = await fetch('https://sturdy-space-fortnight-977qp4xv779j2xgq-2025.app.github.dev/pregunta/1');
+      const response = await fetch('https://friendly-space-cod-x559jq4655vw3rg6-2025.app.github.dev/pregunta/1');
       const data = await response.json();
 
       setCorrectOption(data.correctOption);
