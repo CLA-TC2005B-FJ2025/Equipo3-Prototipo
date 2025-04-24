@@ -35,23 +35,25 @@ const usePopup = () => {
   }, [popupMode]);
 
   const openQuestion = async (num) => {
-  try {
-    const response = await fetch(`https://sturdy-space-fortnight-977qp4xv779j2xgq-2025.app.github.dev/pregunta/${num}`);
-    const data = await response.json();
-
-    setCorrectOption(data.correctOption);
-
-    setPopupMode('question');
-    setPopupData({
-      question: data.pregunta,
-      options: data.options
-    });
-
-    setTimeLeft(30);
-  } catch (error) {
-    console.error(`Error al obtener la pregunta ${num}:`, error);
-  }
-};
+    const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
+    const fullUrl = `${baseUrl}/pregunta/${num}`;
+  
+    try {
+      const response = await fetch(fullUrl);
+      const data = await response.json();
+  
+      setCorrectOption(data.correctOption);
+      setPopupMode('question');
+      setPopupData({
+        question: data.pregunta,
+        options: data.options
+      });
+  
+      setTimeLeft(30);
+    } catch (error) {
+      console.error(`Error al obtener la pregunta ${num}:`, error);
+    }
+  };  
 
   const handleAnswer = (answer, auto = false) => {
     clearInterval(timerRef.current);
