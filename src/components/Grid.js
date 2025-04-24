@@ -1,10 +1,11 @@
 import React from 'react';
 import './Grid.css';
+import logo from '../assets/imagenes/LogoLienzo.jpg'
 
 const Grid = ({
   side = 15,
   size = 600,
-  bgImage = '/workspaces/Equipo3-Prototipo/src/assets/imagenes/hqdefault.jpg',
+
   onItemClick
 }) => {
   const total = side * side;
@@ -17,7 +18,7 @@ const Grid = ({
         '--side': side,
         width: size,
         height: size,
-        backgroundImage: `url(${bgImage})`
+        backgroundImage: `url(${logo})`
       }}
     >
       {cells.map(n => (
@@ -26,7 +27,7 @@ const Grid = ({
           className="grid-item"
           onClick={() => onItemClick?.(n)}
         >
-          {n}
+         {/*{n}*/}
         </div>
       ))}
     </div>

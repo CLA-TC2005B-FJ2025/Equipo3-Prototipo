@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import Header from './components/Header';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
 import './index.css'; // tu CSS global
+import logo from '../src/assets/imagenes/LogoLienzo.jpg';
 
 const App = () => {
   const {
@@ -39,7 +39,7 @@ const App = () => {
 
         <Grid
           onItemClick={handleCellClick}
-          bgImage="/workspaces/Equipo3-Prototipo/src/assets/imagenes/hqdefault.jpg"
+          bgImage = {logo}
           size={600}
           side={15}
         />
