@@ -8,15 +8,6 @@ import usePopup from './hooks/usePopup';
 import './index.css'; // tu CSS global
 
 const App = () => {
-  const [username, setUsername] = useState('Cienfuegos');
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    // Limpia tokens, contexto, etc.
-    setUsername(null);
-    navigate('/login');
-  };
-
   const {
     popupMode,
     popupData,
@@ -25,17 +16,30 @@ const App = () => {
     closePopup,
     timeLeft
   } = usePopup();
+  
+  const [username, setUsername] = useState('Cienfuegos');
+
+  const handleLogout = () => {
+    // Limpia tokens, contexto, etc.
+    setUsername(null);
+  };
+
+  const handleCellClick = (num) => {
+    console.log(`Casilla ${num} clicada`);
+    openQuestion(num);  // por ejemplo, pasar el ID al hook
+  };  
+
+ 
 
   return (
     <>
       <Header username={username} onLogout={handleLogout} />
 
       <main style={{ padding: '1rem' }}>
-        <h1>Cuadrícula + Pop-up</h1>
 
         <Grid
-          onItemClick={openQuestion}
-          bgImage="/img/mi-fondo.jpg"
+          onItemClick={handleCellClick}
+          bgImage="/workspaces/Equipo3-Prototipo/src/assets/imagenes/hqdefault.jpg"
           size={600}
           side={15}
         />

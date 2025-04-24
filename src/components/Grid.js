@@ -4,7 +4,7 @@ import './Grid.css';
 const Grid = ({
   side = 15,
   size = 600,
-  bgImage = '/img/tu-imagen.jpg',
+  bgImage = '/workspaces/Equipo3-Prototipo/src/assets/imagenes/hqdefault.jpg',
   onItemClick
 }) => {
   const total = side * side;
@@ -24,7 +24,7 @@ const Grid = ({
         <div
           key={n}
           className="grid-item"
-          onClick={() => onItemClick(n)}
+          onClick={() => onItemClick?.(n)}
         >
           {n}
         </div>

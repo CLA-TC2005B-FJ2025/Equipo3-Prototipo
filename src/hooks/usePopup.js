@@ -1,7 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-
-/*const apiBaseUrl = process.env.URL_CRUD_SERVER || 'http://127.0.0.1:5000';*/
-/*console.log(apiBaseUrl);*/
 const usePopup = () => {
   const [popupMode, setPopupMode] = useState(null); // 'question', 'correct', 'incorrect'
   const [popupData, setPopupData] = useState(null);
@@ -34,24 +31,26 @@ const usePopup = () => {
     return () => clearInterval(timerRef.current);
   }, [popupMode]);
 
-  const openQuestion = async () => {
+  const openQuestion = async (num) => {
+    const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
+    const fullUrl = `${baseUrl}/pregunta/${num}`;
+  
     try {
-      const response = await fetch('https://friendly-space-cod-x559jq4655vw3rg6-2025.app.github.dev/pregunta/1');
+      const response = await fetch(fullUrl);
       const data = await response.json();
-
+  
       setCorrectOption(data.correctOption);
-
       setPopupMode('question');
       setPopupData({
         question: data.pregunta,
         options: data.options
       });
-
+  
       setTimeLeft(30);
     } catch (error) {
-      console.error('Error al obtener la pregunta:', error);
+      console.error(`Error al obtener la pregunta ${num}:`, error);
     }
-  };
+  };  
 
   const handleAnswer = (answer, auto = false) => {
     clearInterval(timerRef.current);

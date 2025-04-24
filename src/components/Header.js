@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserMenu from './UserMenu';
 import './Header.css';
+import logo from '../assets/imagenes/LogoLienzo.jpg';
+
 
 const Header = ({ username, onLogout }) => {
   const navigate = useNavigate();
@@ -9,7 +11,7 @@ const Header = ({ username, onLogout }) => {
   return (
     <header className="header">
       <div className="logo" onClick={() => navigate('/')}>
-        <img src="/workspaces/Equipo3-Prototipo/src/assets/imagenes/LogoLienzo.jpg" alt="Lienzo Logo" />
+        <img src={logo} alt="Logo de Lienzo" />
       </div>
       <UserMenu username={username} onLogout={onLogout} />
     </header>
