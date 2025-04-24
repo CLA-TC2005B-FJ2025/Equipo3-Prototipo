@@ -1,23 +1,31 @@
 import React from 'react';
+import './Grid.css';      // Asegúrate de crear/importar el CSS
 
-const Grid = ({ onItemClick }) => {
-  // Se crea un array de 225 elementos (15x15) con datos de ejemplo
-  const gridItems = Array.from({ length: 225 }, (_, index) => ({
-    id: index,
-    question: `Pregunta ${index + 1}: ¿Ejemplo de pregunta?`,
-    answers: ['Respuesta A', 'Respuesta B', 'Respuesta C', 'Respuesta D'],
-    correct: 2  // Indica que la segunda respuesta (índice 2, considerando que el índice comienza en 1) es la correcta.
-  }));
+const Grid = ({
+  side = 15,              // número de celdas por lado     (15×15)
+  size = 600,             // ancho/alto del tablero en px  (cuadrado)
+  bgImage = '/workspaces/Equipo3-Prototipo/src/assets/imagenes/hqdefault.jpg',
+  onItemClick
+}) => {
+
+  const total = side * side;
+  const cells = Array.from({ length: total }, (_, i) => i + 1);
 
   return (
-    <div className="grid-container">
-      {gridItems.map((item) => (
+    <div
+      className="grid-container"
+      style={{
+        width: size,
+        backgroundImage: `url(${bgImage})`
+      }}
+    >
+      {cells.map(n => (
         <div
-          key={item.id}
+          key={n}
           className="grid-item"
-          onClick={() => onItemClick(item)}
+          onClick={() => onItemClick?.(n)}
         >
-          {/* Puedes mostrar un número u otro contenido en la celda si lo deseas */}
+          {n}
         </div>
       ))}
     </div>
@@ -25,3 +33,4 @@ const Grid = ({ onItemClick }) => {
 };
 
 export default Grid;
+

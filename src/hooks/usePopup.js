@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
+/*const apiBaseUrl = process.env.URL_CRUD_SERVER || 'http://127.0.0.1:5000';*/
+/*console.log(apiBaseUrl);*/
 const usePopup = () => {
   const [popupMode, setPopupMode] = useState(null); // 'question', 'correct', 'incorrect'
   const [popupData, setPopupData] = useState(null);
@@ -34,7 +36,7 @@ const usePopup = () => {
 
   const openQuestion = async () => {
     try {
-      const response = await fetch('https://zany-space-broccoli-x5w6656j5xxpfv656-2025.app.github.dev/pregunta/1');
+      const response = await fetch('https://sturdy-space-fortnight-977qp4xv779j2xgq-2025.app.github.dev/pregunta/1');
       const data = await response.json();
 
       setCorrectOption(data.correctOption);
