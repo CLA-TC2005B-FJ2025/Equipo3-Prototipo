@@ -13,7 +13,7 @@
   }
   
   .logo img:hover {
-    transform: scale(1.1);           /* aumentas un 10% al pasar el ratón */
+    transform: scale(1.1);           
   }
   
   .user-icon {
