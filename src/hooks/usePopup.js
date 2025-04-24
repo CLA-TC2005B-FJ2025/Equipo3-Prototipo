@@ -34,24 +34,24 @@ const usePopup = () => {
     return () => clearInterval(timerRef.current);
   }, [popupMode]);
 
-  const openQuestion = async () => {
-    try {
-      const response = await fetch('https://sturdy-space-fortnight-977qp4xv779j2xgq-2025.app.github.dev/pregunta/1');
-      const data = await response.json();
+  const openQuestion = async (num) => {
+  try {
+    const response = await fetch(`https://sturdy-space-fortnight-977qp4xv779j2xgq-2025.app.github.dev/pregunta/${num}`);
+    const data = await response.json();
 
-      setCorrectOption(data.correctOption);
+    setCorrectOption(data.correctOption);
 
-      setPopupMode('question');
-      setPopupData({
-        question: data.pregunta,
-        options: data.options
-      });
+    setPopupMode('question');
+    setPopupData({
+      question: data.pregunta,
+      options: data.options
+    });
 
-      setTimeLeft(30);
-    } catch (error) {
-      console.error('Error al obtener la pregunta:', error);
-    }
-  };
+    setTimeLeft(30);
+  } catch (error) {
+    console.error(`Error al obtener la pregunta ${num}:`, error);
+  }
+};
 
   const handleAnswer = (answer, auto = false) => {
     clearInterval(timerRef.current);
