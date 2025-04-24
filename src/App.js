@@ -9,12 +9,9 @@ import logo from '../src/assets/imagenes/LogoLienzo.jpg';
 
 const App = () => {
   const {
-    popupMode,
-    popupData,
-    openQuestion,
-    handleAnswer,
-    closePopup,
-    timeLeft
+    popupMode, popupData,
+    openQuestion, handleAnswer,
+    closePopup, timeLeft
   } = usePopup();
   
   const [username, setUsername] = useState('Cienfuegos');

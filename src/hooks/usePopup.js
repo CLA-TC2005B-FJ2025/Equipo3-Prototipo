@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+
 const usePopup = () => {
   const [popupMode, setPopupMode] = useState(null); // 'question', 'correct', 'incorrect'
   const [popupData, setPopupData] = useState(null);
