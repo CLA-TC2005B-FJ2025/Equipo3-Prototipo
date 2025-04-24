@@ -9,7 +9,7 @@
   .logo img {
     height: 40px;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.5s ease;
   }
   
   .logo img:hover {
