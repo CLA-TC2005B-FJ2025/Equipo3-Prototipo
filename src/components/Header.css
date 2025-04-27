@@ -9,6 +9,11 @@
   .logo img {
     height: 40px;
     cursor: pointer;
+    transition: transform 0.5s ease;
+  }
+  
+  .logo img:hover {
+    transform: scale(1.1);           
   }
   
   .user-icon {

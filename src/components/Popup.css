@@ -12,11 +12,10 @@
 
 .popup-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,6 +32,7 @@
   position: relative;
   color: #fff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  margin: auto; 
 }
 
 .popup-content {
@@ -135,13 +135,15 @@
   justify-content: center;
   gap: 1rem;
   color: #000;
-  width: 100%;
+  width: 45%;
   background-color: #f1f1f5;
+  margin: 0 auto;
 }
 
 .answer-box.correct {
   background-color: #3ec16d;
   color: rgb(0, 0, 0);
+  margin: 0 auto;
 }
 .answer-box.correct .option-letter {
   background-color: #ccc;
@@ -150,6 +152,7 @@
 .answer-box.incorrect {
   background-color: #ff4b4b;
   color: rgb(0, 0, 0);
+  margin: 0 auto;
 }
 .answer-box.incorrect .option-letter {
   background-color: #ccc;

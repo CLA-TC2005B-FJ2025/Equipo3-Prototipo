@@ -32,24 +32,26 @@ const usePopup = () => {
     return () => clearInterval(timerRef.current);
   }, [popupMode]);
 
-  const openQuestion = async () => {
+  const openQuestion = async (num) => {
+    const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
+    const fullUrl = `${baseUrl}/pregunta/${num}`;
+  
     try {
-      const response = await fetch('https://fictional-broccoli-977qp4xv9p45fjvw-2025.app.github.dev/pregunta/1');
+      const response = await fetch(fullUrl);
       const data = await response.json();
-
+  
       setCorrectOption(data.correctOption);
-
       setPopupMode('question');
       setPopupData({
         question: data.pregunta,
         options: data.options
       });
-
+  
       setTimeLeft(30);
     } catch (error) {
-      console.error('Error al obtener la pregunta:', error);
+      console.error(`Error al obtener la pregunta ${num}:`, error);
     }
-  };
+  };  
 
   const handleAnswer = (answer, auto = false) => {
     clearInterval(timerRef.current);

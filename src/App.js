@@ -1,47 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import usePopup from './hooks/usePopup';
-import Popup from './components/Popup';
-import SocialLoginModal from './components/LoginPage'; // Si tu componente se llama así
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLogin, setShowLogin] = useState(true);
+import Header from './components/Header';
+import Grid from './components/Grid';
+import Popup from './components/Popup';
+import usePopup from './hooks/usePopup';
+import './index.css';
+import logo from '../src/assets/imagenes/LogoLienzo.jpg';
+import SocialLoginModal from './components/LoginPage'; // asegúrate que este componente tenga la clase "modal"
+
+const App = () => {
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
 
-  // Cargar el SDK de Facebook
+  const [username, setUsername] = useState('Cienfuegos');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
+
+  const handleLogout = () => {
+    setUsername(null);
+  };
+
+  const handleCellClick = (num) => {
+    console.log(`Casilla ${num} clicada`);
+    openQuestion(num);
+  };
+
   useEffect(() => {
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = function () {
       window.FB.init({
-        appId      : '3054409028042015', // ← Reemplaza con tu App ID real
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v19.0'
+        appId: '3054409028042015',
+        cookie: true,
+        xfbml: true,
+        version: 'v19.0',
       });
     };
 
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   }, []);
 
-  // Función de login personalizada con SDK
   const handleFacebookLogin = () => {
-    window.FB.login(function(response) {
+    window.FB.login(function (response) {
       if (response.authResponse) {
         console.log('Bienvenido! Obteniendo tu información.... ');
-        window.FB.api('/me', {fields: 'name'}, function(profile) {
+        window.FB.api('/me', { fields: 'name' }, function (profile) {
           console.log('Usuario:', profile);
           setIsLoggedIn(true);
-          setShowLogin(false); // Cierra el modal
-        },);
+          setShowLogin(false);
+        });
       } else {
         console.log('Usuario canceló el login o no autorizó.');
       }
-    }, {scope: 'public_profile'});
+    }, { scope: 'public_profile' });
   };
 
   const handleInstagramLogin = () => {
@@ -49,31 +63,40 @@ function App() {
   };
 
   return (
-    <div className="App">
-      {showLogin && (
-        <SocialLoginModal
-          onInstagramLogin={handleInstagramLogin}
-          onFacebookLogin={handleFacebookLogin} // Pasamos la función aquí
+    <>
+      <Header username={username} onLogout={handleLogout} />
+
+      <main style={{ padding: '1rem' }}>
+        <Grid
+          onItemClick={handleCellClick}
+          bgImage={logo}
+          size={600}
+          side={15}
         />
-      )}
 
-      {!showLogin && (
+        {popupMode && (
+          <Popup
+            mode={popupMode}
+            data={{ ...popupData, timeLeft }}
+            onClose={closePopup}
+            onAnswer={handleAnswer}
+          />
+        )}
+      </main>
+
+      {showLogin && (
         <>
-          <h1>Demo de Pop-up</h1>
-          <button onClick={openQuestion}>Abrir pregunta</button>
+          <div className="overlay-blocker"></div>
 
-          {popupMode && (
-            <Popup
-              mode={popupMode}
-              data={{ ...popupData, timeLeft }}
-              onClose={closePopup}
-              onAnswer={handleAnswer}
-            />
-          )}
+          <SocialLoginModal
+            onInstagramLogin={handleInstagramLogin}
+            onFacebookLogin={handleFacebookLogin}
+          />
         </>
       )}
-    </div>
+    </>
   );
-}
+};
 
 export default App;
+

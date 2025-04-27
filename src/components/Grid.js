@@ -1,23 +1,33 @@
 import React from 'react';
+import './Grid.css';
+import logo from '../assets/imagenes/LogoLienzo.jpg'
 
-const Grid = ({ onItemClick }) => {
-  // Se crea un array de 225 elementos (15x15) con datos de ejemplo
-  const gridItems = Array.from({ length: 225 }, (_, index) => ({
-    id: index,
-    question: `Pregunta ${index + 1}: ¿Ejemplo de pregunta?`,
-    answers: ['Respuesta A', 'Respuesta B', 'Respuesta C', 'Respuesta D'],
-    correct: 2  // Indica que la segunda respuesta (índice 2, considerando que el índice comienza en 1) es la correcta.
-  }));
+const Grid = ({
+  side = 15,
+  size = 600,
+
+  onItemClick
+}) => {
+  const total = side * side;
+  const cells = Array.from({ length: total }, (_, i) => i + 1);
 
   return (
-    <div className="grid-container">
-      {gridItems.map((item) => (
+    <div
+      className="grid-container"
+      style={{
+        '--side': side,
+        width: size,
+        height: size,
+        backgroundImage: `url(${logo})`
+      }}
+    >
+      {cells.map(n => (
         <div
-          key={item.id}
+          key={n}
           className="grid-item"
-          onClick={() => onItemClick(item)}
+          onClick={() => onItemClick?.(n)}
         >
-          {/* Puedes mostrar un número u otro contenido en la celda si lo deseas */}
+         {/*{n}*/}
         </div>
       ))}
     </div>
@@ -25,3 +35,4 @@ const Grid = ({ onItemClick }) => {
 };
 
 export default Grid;
+

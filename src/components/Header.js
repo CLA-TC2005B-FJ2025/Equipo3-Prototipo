@@ -1,16 +1,19 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import UserMenu from './UserMenu';
 import './Header.css';
+import logo from '../assets/imagenes/LogoLienzo.jpg';
 
 const Header = ({ username, onLogout }) => {
-  const navigate = useNavigate();
+  const goLienzo = () => {
+    window.location.href = 'https://www.lienzo.mx/es/inicio/';
+  };
 
   return (
     <header className="header">
-      <div className="logo" onClick={() => navigate('/')}>
-        <img src="/lienzo-logo.png" alt="Lienzo Logo" />
+      <div className="logo" onClick={goLienzo}>
+        <img src={logo} alt="Lienzo Logo" />
       </div>
+
       <UserMenu username={username} onLogout={onLogout} />
     </header>
   );
