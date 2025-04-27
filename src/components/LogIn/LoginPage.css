@@ -1,0 +1,58 @@
+/* Capa bloqueadora del fondo */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* Fondo oscuro transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Muy por encima */
+}
+
+/* Contenedor del modal */
+.modal-content {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  text-align: center;
+  z-index: 10000; /* Asegura que esté sobre todo */
+}
+
+/* Botones personalizados */
+.instagram-btn, .facebook-btn {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  width: 200px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.instagram-btn {
+  background-color: #E1306C; /* Rosa Instagram */
+}
+
+.facebook-btn {
+  background-color: #3b5998; /* Azul Facebook */
+}
+
+.google-login-btn {
+  margin: 10px 0;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+}
+
+.modal-content p, .modal-content small {
+  margin-top: 15px;
+  color: #333;
+  font-size: 14px;
+}

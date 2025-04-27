@@ -1,65 +1,20 @@
-import React, { useState, useEffect } from 'react';
-
+import React from 'react';
 import Header from './components/Header';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
+import useLogin from './components/LogIn/UseLogIn'; // Importamos nuestra lógica de login
 import './index.css';
 import logo from '../src/assets/imagenes/LogoLienzo.jpg';
-import SocialLoginModal from './components/LoginPage'; // asegúrate que este componente tenga la clase "modal"
+import SocialLoginModal from './components/LogIn/LoginPage';
 
 const App = () => {
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
-
-  const [username, setUsername] = useState('Cienfuegos');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLogin, setShowLogin] = useState(true);
-
-  const handleLogout = () => {
-    setUsername(null);
-  };
+  const { username, showLogin, handleFacebookLogin, handleInstagramLogin, handleLogout, handleGoogleFailure, handleGoogleSuccess } = useLogin();
 
   const handleCellClick = (num) => {
     console.log(`Casilla ${num} clicada`);
     openQuestion(num);
-  };
-
-  useEffect(() => {
-    window.fbAsyncInit = function () {
-      window.FB.init({
-        appId: '3054409028042015',
-        cookie: true,
-        xfbml: true,
-        version: 'v19.0',
-      });
-    };
-
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  }, []);
-
-  const handleFacebookLogin = () => {
-    window.FB.login(function (response) {
-      if (response.authResponse) {
-        console.log('Bienvenido! Obteniendo tu información.... ');
-        window.FB.api('/me', { fields: 'name' }, function (profile) {
-          console.log('Usuario:', profile);
-          setIsLoggedIn(true);
-          setShowLogin(false);
-        });
-      } else {
-        console.log('Usuario canceló el login o no autorizó.');
-      }
-    }, { scope: 'public_profile' });
-  };
-
-  const handleInstagramLogin = () => {
-    alert('Login de Instagram aún no implementado');
   };
 
   return (
@@ -85,18 +40,15 @@ const App = () => {
       </main>
 
       {showLogin && (
-        <>
-          <div className="overlay-blocker"></div>
-
-          <SocialLoginModal
-            onInstagramLogin={handleInstagramLogin}
-            onFacebookLogin={handleFacebookLogin}
-          />
-        </>
+        <SocialLoginModal
+          onInstagramLogin={handleInstagramLogin}
+          onFacebookLogin={handleFacebookLogin}
+          onGoogleSuccess={handleGoogleSuccess}
+          onGoogleFailure={handleGoogleFailure}
+        />
       )}
     </>
   );
 };
 
 export default App;
-
