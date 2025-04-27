@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     window.fbAsyncInit = function() {
       window.FB.init({
-        appId      : '1793172311242624', // ← Reemplaza con tu App ID real
+        appId      : '3054409028042015', // ← Reemplaza con tu App ID real
         cookie     : true,
         xfbml      : true,
         version    : 'v19.0'
