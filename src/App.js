@@ -33,15 +33,15 @@ function App() {
     window.FB.login(function(response) {
       if (response.authResponse) {
         console.log('Bienvenido! Obteniendo tu información.... ');
-        window.FB.api('/me', {fields: 'name,email,picture'}, function(profile) {
+        window.FB.api('/me', {fields: 'name'}, function(profile) {
           console.log('Usuario:', profile);
           setIsLoggedIn(true);
           setShowLogin(false); // Cierra el modal
-        });
+        },);
       } else {
         console.log('Usuario canceló el login o no autorizó.');
       }
-    }, {scope: 'public_profile,email'});
+    }, {scope: 'public_profile'});
   };
 
   const handleInstagramLogin = () => {
