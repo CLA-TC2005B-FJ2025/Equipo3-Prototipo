@@ -75,42 +75,72 @@ export default function useLogin() {
     }
   };
 
-  // LOGIN SOCIAL - Facebook
   const handleFacebookLogin = () => {
     window.FB.login(function (response) {
       if (response.authResponse) {
-        console.log('Bienvenido! Obteniendo tu información.... ');
-        window.FB.api('/me', { fields: 'name' }, function (profile) {
-          console.log('Usuario:', profile);
+        window.FB.api('/me', { fields: 'name' }, async function (profile) {
+          console.log('Usuario Facebook:', profile);
+  
+          // Registrar en /usuariored con contacto = Facebook
+          const registerResponse = await fetch(`${apiBaseUrl}/usuariored`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              usuario: profile.name,
+              contacto: 'Facebook',  // Cambiado aquí
+            }),
+          });
+  
+          const data = await registerResponse.json();
+          console.log('Registro red social:', data);
+  
           setIsLoggedIn(true);
           setShowLogin(false);
           setUsername(profile.name);
-
-          // Guardar en cookies
+  
           Cookies.set('username', profile.name, { expires: 7 });
+          Cookies.set('idUsuario', data.idUsuario, { expires: 7 });
         });
       } else {
         console.log('Usuario canceló el login o no autorizó.');
       }
     }, { scope: 'public_profile' });
   };
-
+  
   // LOGIN SOCIAL - Instagram (pendiente)
   const handleInstagramLogin = () => {
     alert('Login de Instagram aún no implementado');
   };
 
-  // LOGIN SOCIAL - Google
-  const handleGoogleSuccess = (credentialResponse) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
     const decoded = jwtDecode(credentialResponse.credential);
     console.log('Usuario Google:', decoded);
+  
+    // Registrar en /usuariored con contacto = correo del usuario
+    const registerResponse = await fetch(`${apiBaseUrl}/usuariored`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        usuario: decoded.name,
+        contacto: decoded.email,  // Aquí se guarda el correo como contacto
+      }),
+    });
+  
+    const data = await registerResponse.json();
+    console.log('Registro red social:', data);
+  
     setIsLoggedIn(true);
     setShowLogin(false);
     setUsername(decoded.name);
-
-    // Guardar en cookies
+  
     Cookies.set('username', decoded.name, { expires: 7 });
+    Cookies.set('idUsuario', data.idUsuario, { expires: 7 });
   };
+  
 
   const handleGoogleFailure = () => {
     console.log('Error al iniciar sesión con Google');
