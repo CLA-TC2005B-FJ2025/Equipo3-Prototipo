@@ -58,12 +58,14 @@ const usePopup = () => {
     answeredRef.current = true;
 
     const isCorrect = answer.option === correctOption;
+    console.log(isCorrect);
 
     setPopupMode(isCorrect ? 'correct' : 'incorrect');
     setPopupData({
       option: answer.option,
       text: auto ? 'Sin respuesta (tiempo agotado)' : answer.text,
     });
+    return isCorrect;
   };
 
   const closePopup = () => {

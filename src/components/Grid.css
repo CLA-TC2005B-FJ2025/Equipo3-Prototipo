@@ -28,4 +28,11 @@
   background: rgba(0, 0, 0, 0.25);
 }
 
+.grid-item.revealed {
+  /* quitamos el oscurecido al pasar el cursor */
+  cursor: default;
+  border-color: transparent;
+}
+
+
   
