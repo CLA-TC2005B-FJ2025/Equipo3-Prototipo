@@ -14,7 +14,7 @@ export default function useLogin() {
   });
 
   const [username, setUsername] = useState(() => {
-    return Cookies.get('username') || 'Cienfuegos';
+    return Cookies.get('username') || 'Default, nunca por que esta aqui';
   });
 
   const apiBaseUrl = process.env.REACT_APP_URL_CRUD_SERVER || 'http://127.0.0.1:5000';
