@@ -24,8 +24,6 @@ function LoginPage({ onInstagramLogin, onFacebookLogin, onGoogleSuccess, onGoogl
           onError={onGoogleFailure}
         />
       </div>
-
-      <p>Iniciar de otra forma</p>
       <small>Crear una cuenta</small>
     </div>
   );

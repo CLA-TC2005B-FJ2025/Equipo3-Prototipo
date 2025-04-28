@@ -25,7 +25,7 @@ const LoginGeneral = ({
       <div className="modal-content">
         <h1 style={{ fontFamily: 'monospace', color: 'white' }}>Lienzo</h1>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p style={{ color: 'white' }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -43,7 +43,7 @@ const LoginGeneral = ({
           />
           <button type="submit">Iniciar sesión</button>
         </form>
-        <a href="#">Olvidé mis datos de acceso</a>
+        <a href="#">Olvidé mi contraseña</a>
 
         <hr style={{ margin: '20px 0', borderColor: '#ccc' }} />
         <LoginPage
