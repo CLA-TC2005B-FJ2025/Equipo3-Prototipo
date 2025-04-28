@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import LoginPage from './LoginPage'; // Login Social como contenido
+import LoginPage from './LoginPage'; // Para login social
 import './LoginGeneral.css';
 
-const AdminLoginWrapper = ({ 
+const LoginGeneral = ({ 
   onInstagramLogin, onFacebookLogin, 
-  onGoogleSuccess, onGoogleFailure 
+  onGoogleSuccess, onGoogleFailure,
+  handleNormalLogin // Ahora viene como prop desde App
 }) => {
-  const [adminUser, setAdminUser] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleAdminLogin = () => {
-    if (adminUser === 'admin' && adminPassword === '1234') {
-      alert('¡Admin logueado!');
-      // Aquí podrías cerrar el modal
-    } else {
-      alert('Usuario o contraseña incorrectos');
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError('');
+    const success = await handleNormalLogin(username, password); // Usas la prop
+    if (!success) {
+      setError('Usuario o contraseña incorrectos');
     }
   };
 
@@ -23,23 +25,26 @@ const AdminLoginWrapper = ({
       <div className="modal-content">
         <h1 style={{ fontFamily: 'monospace', color: 'white' }}>Lienzo</h1>
 
-        <input
-          type="text"
-          placeholder="Ingresa el usuario de admin"
-          value={adminUser}
-          onChange={(e) => setAdminUser(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Ingresa la contraseña de admin"
-          value={adminPassword}
-          onChange={(e) => setAdminPassword(e.target.value)}
-        />
-
-        <button onClick={handleAdminLogin}>Iniciar sesión</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Ingresa tu usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Ingresa tu contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Iniciar sesión</button>
+        </form>
         <a href="#">Olvidé mis datos de acceso</a>
 
-        {/* Aquí sí va tu LoginPage pero como parte del modal */}
         <hr style={{ margin: '20px 0', borderColor: '#ccc' }} />
         <LoginPage
           onInstagramLogin={onInstagramLogin}
@@ -52,4 +57,4 @@ const AdminLoginWrapper = ({
   );
 };
 
-export default AdminLoginWrapper;
+export default LoginGeneral;

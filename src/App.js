@@ -7,7 +7,7 @@ import usePopup from './hooks/usePopup';
 import useLogin from './components/LogIn/UseLogIn'; // Hook con la lógica de login
 import './index.css';
 import logo from '../src/assets/imagenes/LogoLienzo.jpg';
-import AdminLoginWrapper from './components/LogIn/LoginGeneral'; // Nuevo componente
+import LoginGeneral from './components/LogIn/LoginGeneral'; // Nuevo nombre claro
 
 const App = () => {
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
@@ -15,8 +15,8 @@ const App = () => {
     username, showLogin, 
     handleFacebookLogin, handleInstagramLogin, 
     handleGoogleSuccess, handleGoogleFailure, 
-    handleLogout 
-  } = useLogin();
+    handleLogout, handleNormalLogin 
+  } = useLogin(); // Solo una instancia
 
   const handleCellClick = (num) => {
     console.log(`Casilla ${num} clicada`);
@@ -46,11 +46,12 @@ const App = () => {
       </main>
 
       {showLogin && (
-        <AdminLoginWrapper
+        <LoginGeneral
           onInstagramLogin={handleInstagramLogin}
           onFacebookLogin={handleFacebookLogin}
           onGoogleSuccess={handleGoogleSuccess}
           onGoogleFailure={handleGoogleFailure}
+          handleNormalLogin={handleNormalLogin} // Aquí pasas el login normal como prop
         />
       )}
     </>
