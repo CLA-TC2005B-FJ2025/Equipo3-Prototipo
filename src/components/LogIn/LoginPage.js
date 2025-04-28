@@ -1,31 +1,32 @@
 import React from 'react';
-import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
+import './LoginPage.css';
 
 function LoginPage({ onInstagramLogin, onFacebookLogin, onGoogleSuccess, onGoogleFailure }) {
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Sign in with</h2>
+    <div className="login-social-content">
+      <h3 style={{ color: 'white' }}>O inicia sesión con</h3>
 
-        <button className="instagram-btn" onClick={onInstagramLogin}>
-          <i className="fab fa-instagram"></i> Instagram
-        </button>
+      {/* Botón Instagram */}
+      <button className="instagram-btn" onClick={onInstagramLogin}>
+        Instagram
+      </button>
 
-        <button className="facebook-btn" onClick={onFacebookLogin}>
-          <i className="fab fa-facebook-f"></i> Facebook
-        </button>
+      {/* Botón Facebook */}
+      <button className="facebook-btn" onClick={onFacebookLogin}>
+        Facebook
+      </button>
 
-        <div className="google-login-btn">
-          <GoogleLogin
-            onSuccess={onGoogleSuccess}
-            onError={onGoogleFailure}
-          />
-        </div>
-
-        <p>Iniciar de otra forma</p>
-        <small>Crear una cuenta</small>
+      {/* Botón Google */}
+      <div className="google-login-btn">
+        <GoogleLogin
+          onSuccess={onGoogleSuccess}
+          onError={onGoogleFailure}
+        />
       </div>
+
+      <p>Iniciar de otra forma</p>
+      <small>Crear una cuenta</small>
     </div>
   );
 }

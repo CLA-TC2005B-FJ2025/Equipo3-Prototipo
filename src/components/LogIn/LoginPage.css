@@ -1,25 +1,3 @@
-/* Capa bloqueadora del fondo */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4); /* Fondo oscuro transparente */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999; /* Muy por encima */
-}
-
-/* Contenedor del modal */
-.modal-content {
-  background: white;
-  padding: 2rem 3rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  text-align: center;
-  z-index: 10000; /* Asegura que esté sobre todo */
-}
 
 /* Botones personalizados */
 .instagram-btn, .facebook-btn {

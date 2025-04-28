@@ -1,16 +1,22 @@
 import React from 'react';
+
 import Header from './components/Header';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
-import useLogin from './components/LogIn/UseLogIn'; // Importamos nuestra lógica de login
+import useLogin from './components/LogIn/UseLogIn'; // Hook con la lógica de login
 import './index.css';
 import logo from '../src/assets/imagenes/LogoLienzo.jpg';
-import SocialLoginModal from './components/LogIn/LoginPage';
+import AdminLoginWrapper from './components/LogIn/LoginGeneral'; // Nuevo componente
 
 const App = () => {
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
-  const { username, showLogin, handleFacebookLogin, handleInstagramLogin, handleLogout, handleGoogleFailure, handleGoogleSuccess } = useLogin();
+  const { 
+    username, showLogin, 
+    handleFacebookLogin, handleInstagramLogin, 
+    handleGoogleSuccess, handleGoogleFailure, 
+    handleLogout 
+  } = useLogin();
 
   const handleCellClick = (num) => {
     console.log(`Casilla ${num} clicada`);
@@ -40,7 +46,7 @@ const App = () => {
       </main>
 
       {showLogin && (
-        <SocialLoginModal
+        <AdminLoginWrapper
           onInstagramLogin={handleInstagramLogin}
           onFacebookLogin={handleFacebookLogin}
           onGoogleSuccess={handleGoogleSuccess}
