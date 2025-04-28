@@ -8,6 +8,7 @@ import useLogin from './components/LogIn/UseLogIn'; // Hook con la lógica de lo
 import './index.css';
 import logo from '../src/assets/imagenes/LogoLienzo.jpg';
 import LoginGeneral from './components/LogIn/LoginGeneral'; // Nuevo nombre claro
+import AdminPage from './components/pagAdmin/PagAdmin'; // Entrar al admin por URL
 
 const App = () => {
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
