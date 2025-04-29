@@ -12,8 +12,11 @@ import AnswerInput from './components/AnswerInput';
 import useSolvedCells from './hooks/useSolvedCells';
 import RecoveryPage from './components/LogIn/RecoveryPage';
 import Cookies from 'js-cookie';
+import useTickets from './hooks/useTickets';
+import PageAdmin from './components/PagAdmin/PagAdmin';
 
 const App = () => {
+  const { ticketCount, refresh: refreshTickets } = useTickets();
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
   const { solved, toggle } = useSolvedCells();
   const currentCellRef = useRef(null);
@@ -36,7 +39,7 @@ const App = () => {
       if (!idUsuario) return;           // todavía no logueado
     
       try {
-        await fetch(`${baseUrl}/boleto`, {
+        await fetch('${baseUrl}/boleto', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ tipo: false, idUsuario: Number(idUsuario) })
@@ -49,7 +52,7 @@ const App = () => {
 
   const handleAnswerWithSolved = (answer, auto) => {
     const wasCorrect = handleAnswer(answer, auto); // ← devuelve true|false
-    console.log(`Resultado de WasCorrect ${wasCorrect}`);
+    console.log('Resultado de WasCorrect ${wasCorrect}');
     console.log('resueltas ->', [...solved]);
     if (wasCorrect) 
       {
@@ -95,8 +98,8 @@ const App = () => {
               )}
             </>
           } />
-          {<Route path="/recuperar" element={<RecoveryPage />} />
-        }
+            <Route path="/recuperar" element={<RecoveryPage />} />
+            <Route path="/admin" element={<PageAdmin />} />
         </Routes>
       </main>
     </>
