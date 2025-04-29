@@ -1,6 +1,7 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import './LoginPage.css';
+import { Link } from 'react-router-dom';
 
 function LoginPage({ onInstagramLogin, onFacebookLogin, onGoogleSuccess, onGoogleFailure }) {
   return (
@@ -24,7 +25,9 @@ function LoginPage({ onInstagramLogin, onFacebookLogin, onGoogleSuccess, onGoogl
           onError={onGoogleFailure}
         />
       </div>
-      <small>Crear una cuenta</small>
+      <small> <Link to="/crearcuenta">
+    ¿No tienes cuenta? ¡Regístrate!
+  </Link></small>
     </div>
   );
 }
