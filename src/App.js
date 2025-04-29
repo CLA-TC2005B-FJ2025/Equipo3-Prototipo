@@ -11,7 +11,7 @@ import LoginGeneral from './components/LogIn/LoginGeneral';
 import AnswerInput from './components/AnswerInput';
 import useSolvedCells from './hooks/useSolvedCells';
 import RecoveryPage from './components/LogIn/RecoveryPage';
-import Cookies from 'js-cookie';
+ //import Cookies from 'js-cookie'; // ya no se necesita aqui
 import useTickets from './hooks/useTickets';
 import CrearCuenta from './components/LogIn/CrearCuenta';
 import { addTicket } from './utils/ticketService';
