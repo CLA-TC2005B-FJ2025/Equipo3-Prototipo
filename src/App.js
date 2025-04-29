@@ -12,8 +12,10 @@ import AnswerInput from './components/AnswerInput';
 import useSolvedCells from './hooks/useSolvedCells';
 import RecoveryPage from './components/LogIn/RecoveryPage';
 import Cookies from 'js-cookie';
+import useTickets from './hooks/useTickets';
 
 const App = () => {
+  const { ticketCount, refresh: refreshTickets } = useTickets();
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
   const { solved, toggle } = useSolvedCells();
   const currentCellRef = useRef(null);
@@ -55,13 +57,19 @@ const App = () => {
       {
       toggle(currentCellRef.current);              // marcamos la casilla
       addTicket();
+      refreshTickets();
       console.log('resueltas ->', [...solved]);
+      
       }
     };
     
   return (
     <>
-      <Header username={username} onLogout={handleLogout} />
+      <Header
+        username={username}
+        onLogout={handleLogout}
+        ticketCount={ticketCount}
+      />
 
       <main style={{ padding: '1rem' }}>
         <Routes>

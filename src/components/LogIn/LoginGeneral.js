@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import LoginPage from './LoginPage'; // Para login social
 import './LoginGeneral.css';
 import { Link } from 'react-router-dom';
+import useTickets from '../../hooks/useTickets';
 
 
 const LoginGeneral = ({ 
@@ -12,6 +13,7 @@ const LoginGeneral = ({
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { ticketCount, refresh: refreshTickets } = useTickets();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,6 +21,9 @@ const LoginGeneral = ({
     const success = await handleNormalLogin(username, password); // Usas la prop
     if (!success) {
       setError('Usuario o contraseña incorrectos');
+    }
+    else{
+      refreshTickets();
     }
   };
 

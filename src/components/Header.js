@@ -3,7 +3,7 @@ import UserMenu from './UserMenu';
 import './Header.css';
 import logo from '../assets/imagenes/LogoLienzo.jpg';
 
-const Header = ({ username, onLogout }) => {
+const Header = ({ username, onLogout, ticketCount }) => {
   const goLienzo = () => {
     window.location.href = 'https://www.lienzo.mx/es/inicio/';
   };
@@ -14,6 +14,7 @@ const Header = ({ username, onLogout }) => {
         <img src={logo} alt="Lienzo Logo" />
       </div>
 
+      <span className="tickets">🎫 {ticketCount}</span>
       <UserMenu username={username} onLogout={onLogout} />
     </header>
   );
