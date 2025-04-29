@@ -1,33 +1,36 @@
 // hooks/useCasillas.js
 import { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
+
 
 const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
+const socketUrl = process.env.REACT_APP_URL_IMAGEN; // 2026
 
 export default function useCasillas() {
   const [casillas, setCasillas] = useState([]);
 
   const fetchCasillas = async () => {
-    try {
-      const response = await fetch(`${baseUrl}/casilla`);
-      const data = await response.json();
-
-      console.log('Respuesta cruda de /casillas:', data);
-
-      if (Array.isArray(data.casillas)) {
-        setCasillas(data.casillas);
-      } else if (Array.isArray(data)) {
-        setCasillas(data); // en caso de que devuelva array plano
-      } else {
-        console.error('Formato inesperado en la respuesta de casillas:', data);
-        setCasillas([]);
-      }
-    } catch (error) {
-      console.error('Error al cargar casillas:', error);
-    }
+    const r = await fetch(`${baseUrl}/casilla`);
+    const d = await r.json();
+    setCasillas(Array.isArray(d.casillas) ? d.casillas : d);
   };
 
+  /* carga inicial */
+  useEffect(() => { fetchCasillas(); }, []);
+
+  /* suscripción tiempo-real */
   useEffect(() => {
-    fetchCasillas();
+    const socket = io(socketUrl, { transports: ['websocket'] });
+
+    socket.on('casilla:update', (upd) => {
+      setCasillas(prev =>
+        prev.map(c =>
+          c.idCasilla === upd.idCasilla ? { ...c, estado: upd.estado } : c
+        )
+      );
+    });
+
+    return () => socket.disconnect();
   }, []);
 
   return { casillas, fetchCasillas };

@@ -34,5 +34,10 @@
   border-color: transparent;
 }
 
+.grid-item.ocupada {
+  background: rgba(0,200,255,.25);
+  pointer-events: none;   /* no se puede volver a clicar */
+}
+
 
   

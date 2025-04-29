@@ -1,6 +1,8 @@
 // useAnswerInput.js
 import { useState } from 'react';
 import { addTicket } from '../utils/ticketService';
+import Cookies from 'js-cookie';
+
 
 const useAnswerInput = () => {
   const [popupMessage, setPopupMessage] = useState("");
@@ -11,6 +13,7 @@ const useAnswerInput = () => {
 
   const checkAnswer = async (userAnswer) => {
     const fullUrl = process.env.REACT_APP_URL_CRUD_SERVER + `/imagen/1`;
+    const idusuario = Cookies.get('idUsuario');
 
     try {
       const response = await fetch(fullUrl);
@@ -34,7 +37,7 @@ const useAnswerInput = () => {
               estado: true,
               respuesta: data.respuesta,
               idEvento: data.idEvento,
-              idUsuario: data.idUsuario  // puede ser null si no hay
+              idUsuario: idusuario  // puede ser null si no hay
             }),
           });
 

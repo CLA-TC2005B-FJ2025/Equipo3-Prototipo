@@ -56,13 +56,18 @@ function PagAdmin() {
           .then(imagenes => {
             const imagen = imagenes[0];
             if (imagen && imagen.idUsuario) {
+              console.log(imagen.idUsuario)
               const usuario = usersWithScores.find(user => user.id === imagen.idUsuario);
               if (usuario) {
+                console.log(usuario)
                 setImagenAdivinadaPor(usuario.name);
               } else {
+                console.log("Fallo")
                 setImagenAdivinadaPor('pendiente');
               }
             } else {
+              console.log("Fallo Total")
+              console.log(imagen.idUsuario)
               setImagenAdivinadaPor('pendiente');
             }
           })
