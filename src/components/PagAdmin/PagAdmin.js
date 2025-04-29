@@ -9,7 +9,7 @@ function PagAdmin() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch('https://super-fishstick-69g67ww4xxxw2r7pq-2025.app.github.dev') // <== usa aquí tu dirección real
+    fetch('https://super-fishstick-69g67ww4xxxw2r7pq-2025.app.github.dev') // <== usa aquí tu dirección real SERVIDOR FLASK!
       .then(response => response.json())
       .then(data => {
         // Aquí puedes añadir un campo ficticio `score` si aún no está
