@@ -1,17 +1,22 @@
 import React, { useState, useRef } from 'react';
-
+import { Routes, Route } from 'react-router-dom'; // SOLO Routes y Route aquí
 import Header from './components/Header';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
-import useSolvedCells from './hooks/useSolvedCells';
 import useLogin from './components/LogIn/UseLogIn'; // Hook con la lógica de login
 import './index.css';
 import logo from '../src/assets/imagenes/Mulaka.jpg';
 import LoginGeneral from './components/LogIn/LoginGeneral'; // Nuevo nombre claro
+import AnswerInput from './components/AnswerInput';
+import useSolvedCells from './hooks/useSolvedCells';
+import RecoveryPage from './components/LogIn/RecoveryPage';
 import Cookies from 'js-cookie';
+import useTickets from './hooks/useTickets';
+import PageAdmin from './components/PagAdmin/PagAdmin';
 
 const App = () => {
+  const { ticketCount, refresh: refreshTickets } = useTickets();
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
   const { solved, toggle } = useSolvedCells();
   const currentCellRef = useRef(null);
@@ -20,11 +25,11 @@ const App = () => {
     handleFacebookLogin, handleInstagramLogin, 
     handleGoogleSuccess, handleGoogleFailure, 
     handleLogout, handleNormalLogin 
-  } = useLogin(); // Solo una instancia
+  } = useLogin();
 
   const handleCellClick = (num) => {
-    if (solved.has(num)) return;            // ya resuelta → ignorar
-    currentCellRef.current = num;  
+    if (solved.has(num)) return;
+    currentCellRef.current = num;
     openQuestion(num);
   };
 
@@ -34,10 +39,10 @@ const App = () => {
       if (!idUsuario) return;           // todavía no logueado
     
       try {
-        await fetch(`${baseUrl}/boleto`, {
+        await fetch('${baseUrl}/boleto', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tipo: 'Ganado', idUsuario: Number(idUsuario) })
+          body: JSON.stringify({ tipo: false, idUsuario: Number(idUsuario) })
         });
         console.log('Boleto añadido');
       } catch (err) {
@@ -46,9 +51,8 @@ const App = () => {
     };
 
   const handleAnswerWithSolved = (answer, auto) => {
-    
     const wasCorrect = handleAnswer(answer, auto); // ← devuelve true|false
-    console.log(`Resultado de WasCorrect ${wasCorrect}`);
+    console.log('Resultado de WasCorrect ${wasCorrect}');
     console.log('resueltas ->', [...solved]);
     if (wasCorrect) 
       {
@@ -63,33 +67,41 @@ const App = () => {
       <Header username={username} onLogout={handleLogout} />
 
       <main style={{ padding: '1rem' }}>
-        <Grid
-          onItemClick={handleCellClick}
-          bgImage={logo}
-          solvedCells={solved}
-          size={600}
-          side={15}
-        />
-
-        {popupMode && (
-          <Popup
-            mode={popupMode}
-            data={{ ...popupData, timeLeft }}
-            onClose={closePopup}
-            onAnswer={handleAnswerWithSolved}
-          />
-        )}
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Grid
+                onItemClick={handleCellClick}
+                bgImage={logo}
+                solvedCells={solved}
+                size={600}
+                side={15}
+              />
+                 <AnswerInput />
+                  
+              {popupMode && (
+                <Popup
+                  mode={popupMode}
+                  data={{ ...popupData, timeLeft }}
+                  onClose={closePopup}
+                  onAnswer={handleAnswerWithSolved}
+                />
+              )}
+              {showLogin && (
+                <LoginGeneral
+                  onInstagramLogin={handleInstagramLogin}
+                  onFacebookLogin={handleFacebookLogin}
+                  onGoogleSuccess={handleGoogleSuccess}
+                  onGoogleFailure={handleGoogleFailure}
+                  handleNormalLogin={handleNormalLogin}
+                />
+              )}
+            </>
+          } />
+            <Route path="/recuperar" element={<RecoveryPage />} />
+            <Route path="/admin" element={<PageAdmin />} />
+        </Routes>
       </main>
-
-      {showLogin && (
-        <LoginGeneral
-          onInstagramLogin={handleInstagramLogin}
-          onFacebookLogin={handleFacebookLogin}
-          onGoogleSuccess={handleGoogleSuccess}
-          onGoogleFailure={handleGoogleFailure}
-          handleNormalLogin={handleNormalLogin} // Aquí pasas el login normal como prop
-        />
-      )}
     </>
   );
 };
