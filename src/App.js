@@ -15,6 +15,7 @@ import RecoveryPage from './components/LogIn/RecoveryPage';
 import useTickets from './hooks/useTickets';
 import CrearCuenta from './components/LogIn/CrearCuenta';
 import { addTicket } from './utils/ticketService';
+import { registrarIntentoCorrecto, registrarIntentoIncorrecto } from './utils/intentosService';
 import useCasillas from './hooks/useCasillas';
 
 const App = () => {
@@ -74,7 +75,7 @@ const App = () => {
     }
   };
 
-  const liberarCasilla = async (idCasilla) => {
+  const liberarCasilla = async (idCasilla) => { // no se que debe hace este metodo, pero la casilla no se libera
     try {
       await fetch(`${process.env.REACT_APP_URL_IMAGEN}/casilla/liberar`, {
         method: 'PUT',
@@ -105,10 +106,12 @@ const App = () => {
     const wasCorrect = handleAnswer(answer, auto);
 
     if (wasCorrect) {
+      await registrarIntentoCorrecto(currentCellRef.current, 1)
       descubrirCasilla(currentCellRef.current);
       addTicket(false);
       refreshTickets();
     } else {
+      await registrarIntentoIncorrecto(answer.option, currentCellRef.current, 1);
       liberarCasilla(currentCellRef.current);
     }
   };

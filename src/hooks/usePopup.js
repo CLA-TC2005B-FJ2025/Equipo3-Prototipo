@@ -59,7 +59,7 @@ const usePopup = () => {
 
     const isCorrect = answer.option === correctOption;
     console.log(isCorrect);
-
+ 
     setPopupMode(isCorrect ? 'correct' : 'incorrect');
     setPopupData({
       option: answer.option,
