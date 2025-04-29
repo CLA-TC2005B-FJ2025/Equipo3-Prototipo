@@ -11,21 +11,25 @@ function PagAdmin() {
     { id: 3, name: 'JoseLuis', score: 2 },
   ];
 
+  // Ordenar por score (de mayor a menor)
+  const sortedUsers = [...users].sort((a, b) => b.score - a.score);
+  
+
   return (
     <div className="pag-admin">
     <App></App>
     <LoginGeneral></LoginGeneral>
-      <h1>Panel de Administración</h1>
-      <table className="tabla-clasificatoria">
+    <h1>Panel de Administración</h1>
+      <table className="score-table">
         <thead>
           <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Ticket</th>
+            <th>Tickets</th>
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {sortedUsers.map((user) => (
             <tr key={user.id}>
               <td>{user.id}</td>
               <td>{user.name}</td>
