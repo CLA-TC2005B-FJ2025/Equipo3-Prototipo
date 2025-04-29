@@ -3,9 +3,11 @@ import LogIn from './LogIn';
 import App from '../../App';
 import React, { useEffect, useState } from 'react';
 import useLogin from '../LogIn/UseLogIn';
+import Grid from '../Grid';
 
 function PagAdmin() {
   const [users, setUsers] = useState([]);
+  const [imagenAdivinadaPor, setImagenAdivinadaPor] = useState('pendiente');
 
   const { 
     username, 
@@ -20,7 +22,6 @@ function PagAdmin() {
     fetch(`${baseUrl}/usuario`)
       .then(response => response.json())
       .then(async data => {
-        // Obtener boletos para cada usuario en paralelo
         const usersWithScores = await Promise.all(
           data.map(async user => {
             try {
@@ -45,6 +46,27 @@ function PagAdmin() {
         );
 
         setUsers(usersWithScores);
+
+        // Obtener la información de la imagen
+        fetch(`${baseUrl}/imagen`)
+          .then(response => response.json())
+          .then(imagenes => {
+            const imagen = imagenes[0];
+            if (imagen && imagen.idUsuario) {
+              const usuario = usersWithScores.find(user => user.id === imagen.idUsuario);
+              if (usuario) {
+                setImagenAdivinadaPor(usuario.name);
+              } else {
+                setImagenAdivinadaPor('pendiente');
+              }
+            } else {
+              setImagenAdivinadaPor('pendiente');
+            }
+          })
+          .catch(error => {
+            console.error('Error al obtener la imagen:', error);
+            setImagenAdivinadaPor('pendiente');
+          });
       })
       .catch(error => console.error('Error al obtener usuarios:', error));
   }, []);
@@ -52,9 +74,10 @@ function PagAdmin() {
   const sortedUsers = [...users].sort((a, b) => b.score - a.score);
   const totalTickets = users.reduce((acc, user) => acc + user.score, 0);
 
+  //Aquí en la tercera línea abajo estaba App
   return (
     <div className="admin-page">
-      <App />
+      <Grid /> 
       {showLogin ? (
         <LogIn handleNormalLogin={handleNormalLogin} />
       ) : (
@@ -87,6 +110,9 @@ function PagAdmin() {
           </table>
           <p style={{ marginTop: '20px', fontWeight: 'bold' }}>
             {totalTickets} de 225 casillas reveladas
+          </p>
+          <p style={{ marginTop: '10px', fontWeight: 'bold' }}>
+            Usuario que ha adivinado la imagen: {imagenAdivinadaPor}
           </p>
         </>
       )}
