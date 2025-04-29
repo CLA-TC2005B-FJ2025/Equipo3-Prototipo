@@ -19,7 +19,7 @@ const App = () => {
   const { ticketCount, refresh: refreshTickets } = useTickets();
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
   const { solved, toggle } = useSolvedCells();
-  const currentCellRef = useRef(null);
+  const currentCellRef = useRef(null);
   const { 
     username, showLogin, 
     handleFacebookLogin, handleInstagramLogin, 

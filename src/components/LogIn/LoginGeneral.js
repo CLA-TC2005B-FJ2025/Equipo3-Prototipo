@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import LoginPage from './LoginPage'; // Para login social
 import './LoginGeneral.css';
+import { Link } from 'react-router-dom';
+
 
 const LoginGeneral = ({ 
   onInstagramLogin, onFacebookLogin, 
@@ -43,7 +45,12 @@ const LoginGeneral = ({
           />
           <button type="submit">Iniciar sesión</button>
         </form>
-        <a href="#">Olvidé mi contraseña</a>
+        <small>
+          <Link to="/recuperar">
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </small>
+
 
         <hr style={{ margin: '20px 0', borderColor: '#ccc' }} />
         <LoginPage

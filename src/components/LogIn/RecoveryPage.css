@@ -1,0 +1,64 @@
+.recovery-page {
+    min-height: 100vh;
+    background-color: #fde3e3; /* Fondo rojo claro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .recovery-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .recovery-content h2 {
+    margin-bottom: 1rem;
+    color: #d21919;
+  }
+  
+  .recovery-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .recovery-content button {
+    width: 100%;
+    padding: 10px;
+    background: #d21919;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .recovery-content button:hover {
+    background: #c01515;
+  }
+  
+  /* Estilo para el link de volver al login */
+  .volver-login {
+    margin-top: 20px;
+  }
+  
+  .volver-login a {
+    color: #d21919;
+    text-decoration: underline;
+    font-size: 14px;
+  }
+  
+  .volver-login a:hover {
+    color: #a10d0d;
+  }
+  
