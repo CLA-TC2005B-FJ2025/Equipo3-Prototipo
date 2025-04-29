@@ -1,0 +1,29 @@
+.admin-page {
+    padding: 20px;
+    background-color: var(--light-brown);
+    color: var(--white);
+    min-height: 100vh;
+  }
+  
+  .score-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--gray);
+  }
+  
+  .score-table th, .score-table td {
+    padding: 12px;
+    border: 1px solid var(--white);
+    text-align: center;
+  }
+  
+  .score-table th {
+    background-color: var(--main-red);
+    color: var(--white);
+  }
+  
+  .score-table tr:nth-child(even) {
+    background-color: var(--light-brown);
+  }
+  

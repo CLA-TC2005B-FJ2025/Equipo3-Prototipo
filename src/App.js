@@ -150,16 +150,17 @@ const App = () => {
               )}
 
               {showLogin && (
-                <LoginGeneral
+                <LoginGeneral // THIS
                   onInstagramLogin={handleInstagramLogin}
                   onFacebookLogin={handleFacebookLogin}
                   onGoogleSuccess={handleGoogleSuccess}
                   onGoogleFailure={handleGoogleFailure}
-                  handleNormalLogin={handleNormalLogin}
+                  handleNormalLogin={handleNormalLogin} 
                 />
               )}
             </>
           } />
+          <Route path="/admin" element={<PageAdmin />} />
           <Route path="/recuperar" element={<RecoveryPage />} />
           <Route path="/crearcuenta" element={<CrearCuenta />} />
         </Routes>
