@@ -14,6 +14,7 @@ import RecoveryPage from './components/LogIn/RecoveryPage';
 import Cookies from 'js-cookie';
 import useTickets from './hooks/useTickets';
 import CrearCuenta from './components/LogIn/CrearCuenta';
+import { addTicket } from './utils/ticketService';
 
 const App = () => {
   const { ticketCount, refresh: refreshTickets } = useTickets();
@@ -33,22 +34,6 @@ const App = () => {
     openQuestion(num);
   };
 
-  const addTicket = async () => {
-      const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
-      const idUsuario = Cookies.get('idUsuario');
-      if (!idUsuario) return;           // todavía no logueado
-    
-      try {
-        await fetch(`${baseUrl}/boleto`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tipo: false, idUsuario: Number(idUsuario) })
-        });
-        console.log('Boleto añadido');
-      } catch (err) {
-        console.error('Error creando boleto:', err);
-      }
-    };
 
   const handleAnswerWithSolved = (answer, auto) => {
     const wasCorrect = handleAnswer(answer, auto); // ← devuelve true|false
@@ -56,8 +41,9 @@ const App = () => {
     console.log('resueltas ->', [...solved]);
     if (wasCorrect) 
       {
+      addTicket(false); // movi la funcion de addTicket a /utils/ticketService porque la utilizaba en otro lugar
       toggle(currentCellRef.current);              // marcamos la casilla
-      addTicket();
+      
       refreshTickets();
       console.log('resueltas ->', [...solved]);
       
