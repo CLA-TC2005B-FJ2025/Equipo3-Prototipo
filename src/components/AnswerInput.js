@@ -8,7 +8,6 @@ const AnswerInput = () => {
   const {
     popupMessage,
     showPopup,
-    ganasteBoleto,
     checkAnswer,
     closePopup,
   } = useAnswerInput();
@@ -33,11 +32,13 @@ const AnswerInput = () => {
 
       {showPopup && (
         <div className="popupAnswer">
-          
           <div className="popupAnswer-content">
             <h2>{popupMessage}</h2>
-            {ganasteBoleto && (
+            {popupMessage === '¡Respuesta correcta!' && (
               <p className="boleto-message">¡Has ganado un boleto!</p>
+            )}
+            {popupMessage === 'Respuesta incorrecta.' && (
+              <p className="boleto-message">¡Sigue intentando!</p>
             )}
             <button onClick={closePopup}>Cerrar</button>
           </div>
