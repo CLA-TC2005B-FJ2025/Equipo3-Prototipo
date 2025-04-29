@@ -1,6 +1,6 @@
-import './PagAdmin.css'; 
+/* src/components/PagAdmin/PagAdmin.js */
+import './PagAdmin.css';
 import LogIn from './LogIn';
-import App from '../../App';
 import React, { useEffect, useState } from 'react';
 import useLogin from '../LogIn/UseLogIn';
 import Grid from '../Grid';
@@ -8,97 +8,104 @@ import useCasillas from '../../hooks/useCasillas';
 import logo from '/workspaces/Equipo3-Prototipo/src/assets/imagenes/LogoLienzo.jpg';
 
 function PagAdmin() {
-  const [users, setUsers] = useState([]);
+  /* ──────────────── estado ──────────────── */
+  const [users, setUsers]                 = useState([]);
   const [imagenAdivinadaPor, setImagenAdivinadaPor] = useState('pendiente');
-   const { casillas, fetchCasillas,solved } = useCasillas();
+  const [statsPregunta, setStatsPregunta] = useState([]);   // ← NUEVO
 
-  const { 
-    username, 
-    showLogin, 
-    handleLogout, 
-    handleNormalLogin 
+  /* hooks existentes */
+  const { casillas } = useCasillas();
+  const {
+    username, showLogin,
+    handleLogout, handleNormalLogin
   } = useLogin();
 
+  /* ──────────────── usuarios + boletos + quién adivinó ──────────────── */
   useEffect(() => {
     const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
 
     fetch(`${baseUrl}/usuario`)
-      .then(response => response.json())
-      .then(async data => {
+      .then(r => r.json())
+      .then(async listaUsuarios => {
+        /* mapea usuarios con sus tickets */
         const usersWithScores = await Promise.all(
-          data.map(async user => {
+          listaUsuarios.map(async u => {
             try {
-              const response = await fetch(`${baseUrl}/boletousuario/${user.idUsuario}`);
-              const ticketData = await response.json();
-              return {
-                id: user.idUsuario,
-                name: user.usuario,
-                contacto: user.contacto,
-                score: ticketData.cantidad || 0
-              };
-            } catch (error) {
-              console.error(`Error al obtener boletos para usuario ${user.idUsuario}:`, error);
-              return {
-                id: user.idUsuario,
-                name: user.usuario,
-                contacto: user.contacto,
-                score: 0
-              };
+              const resT = await fetch(`${baseUrl}/boletousuario/${u.idUsuario}`);
+              const { cantidad = 0 } = await resT.json();
+              return { id: u.idUsuario, name: u.usuario, contacto: u.contacto, score: cantidad };
+            } catch {
+              return { id: u.idUsuario, name: u.usuario, contacto: u.contacto, score: 0 };
             }
           })
         );
-
         setUsers(usersWithScores);
 
-        // Obtener la información de la imagen
+        /* quién adivinó la imagen */
         fetch(`${baseUrl}/imagen`)
-          .then(response => response.json())
+          .then(r => r.json())
           .then(imagenes => {
-            const imagen = imagenes[0];
-            if (imagen && imagen.idUsuario) {
-              console.log(imagen.idUsuario)
-              const usuario = usersWithScores.find(user => user.id === imagen.idUsuario);
-              if (usuario) {
-                console.log(usuario)
-                setImagenAdivinadaPor(usuario.name);
-              } else {
-                console.log("Fallo")
-                setImagenAdivinadaPor('pendiente');
-              }
+            const img = imagenes[0];
+            if (img?.idUsuario) {
+              const u = usersWithScores.find(us => us.id === img.idUsuario);
+              setImagenAdivinadaPor(u ? u.name : 'pendiente');
             } else {
-              console.log("Fallo Total")
-              console.log(imagen.idUsuario)
               setImagenAdivinadaPor('pendiente');
             }
           })
-          .catch(error => {
-            console.error('Error al obtener la imagen:', error);
-            setImagenAdivinadaPor('pendiente');
-          });
+          .catch(() => setImagenAdivinadaPor('pendiente'));
       })
-      .catch(error => console.error('Error al obtener usuarios:', error));
+      .catch(err => console.error('Error usuarios:', err));
   }, []);
 
+  /* ──────────────── estadísticas de preguntas ──────────────── */
   useEffect(() => {
-    if (!Array.isArray(casillas)) return;
-    console.log('Casillas recibidas:', casillas);
-    const descubiertas = casillas.filter(c => c.estado === 'descubierta');
-    console.log('Casillas descubiertas:', descubiertas);
-  }, [casillas]);
+    const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
 
-  const sortedUsers = [...users].sort((a, b) => b.score - a.score);
-  const totalTickets = users.reduce((acc, user) => acc + user.score, 0);
+    const cargarStats = async () => {
+      try {
+        /* 1· obtener casillas para saber idPregunta y estado */
+        const cas = await fetch(`${baseUrl}/casilla`).then(r => r.json());
 
-  //Aquí en la tercera línea abajo estaba App
+        /* 2· para cada pregunta, obtener #intentos y texto */
+        const rows = await Promise.all(
+          cas.map(async c => {
+            const intentosRes = await fetch(`${baseUrl}/preguntaIntentos/${c.idPregunta}`);
+            const { pregunta, intentosIncorrectos } = await intentosRes.json();
+
+            return {
+              idPregunta: c.idPregunta,
+              pregunta,
+              intentos: intentosIncorrectos,
+              estado: c.estado
+            };
+          })
+        );
+        setStatsPregunta(rows);
+      } catch (err) {
+        console.error('Error cargando stats pregunta:', err);
+      }
+    };
+
+    cargarStats();
+  }, []);
+
+  /* ──────────────── utilidades render ──────────────── */
+  const sortedUsers  = [...users].sort((a, b) => b.score - a.score);
+  const totalTickets = users.reduce((sum, u) => sum + u.score, 0);
+
+  /* ──────────────── render ──────────────── */
   return (
     <div className="admin-page">
+      {/* Mapa de casillas */}
       <Grid
         bgImage={logo}
-        solvedCells={solved}
+        solvedCells={[]}           /* puedes cambiar si ocupas solved */
         casillas={Array.isArray(casillas) ? casillas : []}
         size={600}
         side={15}
       />
+
       {showLogin ? (
         <LogIn handleNormalLogin={handleNormalLogin} />
       ) : (
@@ -107,6 +114,8 @@ function PagAdmin() {
           <button onClick={handleLogout} style={{ marginBottom: '20px' }}>
             Cerrar sesión
           </button>
+
+          {/* ───────── tabla ranking ───────── */}
           <table className="score-table">
             <thead>
               <tr>
@@ -118,17 +127,40 @@ function PagAdmin() {
               </tr>
             </thead>
             <tbody>
-              {sortedUsers.map((user, index) => (
-                <tr key={user.id}>
-                  <td>{index + 1}</td>
-                  <td>{user.id}</td>
-                  <td>{user.name}</td>
-                  <td>{user.contacto}</td>
-                  <td>{user.score}</td>
+              {sortedUsers.map((u, i) => (
+                <tr key={u.id}>
+                  <td>{i + 1}</td>
+                  <td>{u.id}</td>
+                  <td>{u.name}</td>
+                  <td>{u.contacto}</td>
+                  <td>{u.score}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {/* ───────── tabla estadísticas por pregunta ───────── */}
+          <table className="Estadisticas_Pregunta">
+            <thead>
+              <tr>
+                <th>ID Pregunta</th>
+                <th>Pregunta</th>
+                <th>Intentos incorrectos</th>
+                <th>Estado casilla</th>
+              </tr>
+            </thead>
+            <tbody>
+              {statsPregunta.map(row => (
+                <tr key={row.idPregunta}>
+                  <td>{row.idPregunta}</td>
+                  <td style={{ textAlign: 'left' }}>{row.pregunta}</td>
+                  <td>{row.intentos}</td>
+                  <td>{row.estado}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
           <p style={{ marginTop: '20px', fontWeight: 'bold' }}>
             {totalTickets} de 225 casillas reveladas
           </p>
