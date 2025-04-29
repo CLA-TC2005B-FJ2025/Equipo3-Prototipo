@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
@@ -18,6 +18,11 @@ export default function useTickets () {
       console.error('Error obteniendo boletos:', err);
     }
   }, [idUsuario]);
+
+  // Este useEffect lo llamará al cargar por primera vez
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   return { ticketCount, refresh };
 }
