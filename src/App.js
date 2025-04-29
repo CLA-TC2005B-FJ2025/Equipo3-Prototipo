@@ -9,6 +9,7 @@ import useLogin from './components/LogIn/UseLogIn'; // Hook con la lógica de lo
 import './index.css';
 import logo from '../src/assets/imagenes/Mulaka.jpg';
 import LoginGeneral from './components/LogIn/LoginGeneral'; // Nuevo nombre claro
+import Cookies from 'js-cookie';
 
 const App = () => {
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
@@ -27,6 +28,23 @@ const App = () => {
     openQuestion(num);
   };
 
+  const addTicket = async () => {
+      const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
+      const idUsuario = Cookies.get('idUsuario');
+      if (!idUsuario) return;           // todavía no logueado
+    
+      try {
+        await fetch(`${baseUrl}/boleto`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tipo: 'Ganado', idUsuario: Number(idUsuario) })
+        });
+        console.log('Boleto añadido');
+      } catch (err) {
+        console.error('Error creando boleto:', err);
+      }
+    };
+
   const handleAnswerWithSolved = (answer, auto) => {
     
     const wasCorrect = handleAnswer(answer, auto); // ← devuelve true|false
@@ -35,6 +53,7 @@ const App = () => {
     if (wasCorrect) 
       {
       toggle(currentCellRef.current);              // marcamos la casilla
+      addTicket();
       console.log('resueltas ->', [...solved]);
       }
     };
