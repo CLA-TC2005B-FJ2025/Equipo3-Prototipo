@@ -1,0 +1,32 @@
+.answer-input-container {
+    padding: 5px;
+    width: 100%; /* Que ocupe todo el ancho para poder centrar su contenido */
+    display: flex; /* Para colocar input y botón uno al lado del otro */
+    justify-content: center; /* Centrar horizontalmente */
+    gap: 10px; /* Espacio entre el input y el botón */
+    margin-top: 5px; /* Separación del grid de arriba */
+  }
+  
+  .answer-input {
+    flex: 1; /* Que el input ocupe todo el espacio posible */
+    max-width: 300px; /* Máximo ancho para que no sea gigante */
+    padding: 10px;
+    border: 2px solid #ccc;;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .answer-button {
+    padding: 10px 20px;
+    background: #000;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .answer-button:hover {
+    background-color: #555;
+  }
+  
