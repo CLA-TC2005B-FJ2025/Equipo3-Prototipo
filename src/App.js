@@ -13,6 +13,7 @@ import useSolvedCells from './hooks/useSolvedCells';
 import RecoveryPage from './components/LogIn/RecoveryPage';
 import Cookies from 'js-cookie';
 import useTickets from './hooks/useTickets';
+import CrearCuenta from './components/LogIn/CrearCuenta';
 
 const App = () => {
   const { ticketCount, refresh: refreshTickets } = useTickets();
@@ -103,8 +104,8 @@ const App = () => {
               )}
             </>
           } />
-          {<Route path="/recuperar" element={<RecoveryPage />} />
-        }
+          <Route path="/recuperar" element={<RecoveryPage />} />
+          <Route path="/crearcuenta" element={<CrearCuenta />} />
         </Routes>
       </main>
     </>

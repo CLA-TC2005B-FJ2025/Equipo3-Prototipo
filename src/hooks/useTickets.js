@@ -11,7 +11,7 @@ export default function useTickets () {
   const refresh = useCallback(async () => {
     if (!idUsuario) return;
     try {
-      const res = await fetch(`${baseUrl}/boletos/usuario/${idUsuario}`);
+      const res = await fetch(`${baseUrl}/boletousuario/${idUsuario}`);
       const data = await res.json();
       setTicketCount(data.cantidad ?? 0);
     } catch (err) {
