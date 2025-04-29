@@ -1,9 +1,10 @@
 import React from 'react';
 import './PagAdmin.css'; 
 import LoginGeneral from '../LogIn/LoginGeneral';
+import App from '../../App';
 
 function PagAdmin() {
-  // Datos de ejemplo
+  // Datos de ejemplo (Serán sustituídos por datos del WS)
   const users = [
     { id: 1, name: 'AlbertoAG', score: 5 },
     { id: 2, name: 'CVentura', score: 3 },
@@ -12,6 +13,7 @@ function PagAdmin() {
 
   return (
     <div className="pag-admin">
+    <App></App>
     <LoginGeneral></LoginGeneral>
       <h1>Panel de Administración</h1>
       <table className="tabla-clasificatoria">

@@ -12,11 +12,11 @@ import AnswerInput from './components/AnswerInput';
 import useSolvedCells from './hooks/useSolvedCells';
 import RecoveryPage from './components/LogIn/RecoveryPage';
 import Cookies from 'js-cookie';
-import useTickets from './hooks/useTickets';
+//import useTickets from './hooks/useTickets';
 import PageAdmin from './components/PagAdmin/PagAdmin';
 
 const App = () => {
-  const { ticketCount, refresh: refreshTickets } = useTickets();
+  //const { ticketCount, refresh: refreshTickets } = useTickets();
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
   const { solved, toggle } = useSolvedCells();
   const currentCellRef = useRef(null);
