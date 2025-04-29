@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
 
-export default function useLogin() {
+export default function useLogin() { // THIS
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const storedUsername = Cookies.get('username');
     return storedUsername ? true : false;

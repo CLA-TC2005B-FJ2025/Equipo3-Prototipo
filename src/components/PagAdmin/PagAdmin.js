@@ -1,24 +1,48 @@
-// import React from 'react';
 import './PagAdmin.css'; 
-import LoginGeneral from '../LogIn/LoginGeneral';
+import LogIn from './LogIn';
 import App from '../../App';
 import React, { useEffect, useState } from 'react';
-
+import useLogin from '../LogIn/UseLogIn';
 
 function PagAdmin() {
   const [users, setUsers] = useState([]);
 
+  const { 
+    username, 
+    showLogin, 
+    handleLogout, 
+    handleNormalLogin 
+  } = useLogin();
+
   useEffect(() => {
-    fetch('https://super-fishstick-69g67ww4xxxw2r7pq-2025.app.github.dev') // <== usa aquí tu dirección real SERVIDOR FLASK!
+    const baseUrl = 'https://stunning-adventure-977qp4xv9prp27j4v-2025.app.github.dev';
+
+    fetch(`${baseUrl}/usuario`)
       .then(response => response.json())
-      .then(data => {
-        // Aquí puedes añadir un campo ficticio `score` si aún no está
-        const usersWithScores = data.map(user => ({
-          id: user.idUsuario,
-          name: user.usuario,
-          email: user.contacto, // Eliminar esto si es necesario
-          score: Math.floor(Math.random() * 10) // Por ahora: simula tickets
-        }));
+      .then(async data => {
+        // Obtener boletos para cada usuario en paralelo
+        const usersWithScores = await Promise.all(
+          data.map(async user => {
+            try {
+              const response = await fetch(`${baseUrl}/boletousuario/${user.idUsuario}`);
+              const ticketData = await response.json();
+              return {
+                id: user.idUsuario,
+                name: user.usuario,
+                contacto: user.contacto,
+                score: ticketData.cantidad || 0
+              };
+            } catch (error) {
+              console.error(`Error al obtener boletos para usuario ${user.idUsuario}:`, error);
+              return {
+                id: user.idUsuario,
+                name: user.usuario,
+                contacto: user.contacto,
+                score: 0
+              };
+            }
+          })
+        );
 
         setUsers(usersWithScores);
       })
@@ -26,32 +50,46 @@ function PagAdmin() {
   }, []);
 
   const sortedUsers = [...users].sort((a, b) => b.score - a.score);
+  const totalTickets = users.reduce((acc, user) => acc + user.score, 0);
 
   return (
     <div className="admin-page">
-      <App></App>
-      <LoginGeneral></LoginGeneral>
-      <h1>Panel de Administración</h1>
-      <table className="score-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Tickets</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedUsers.map(user => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.score}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <App />
+      {showLogin ? (
+        <LogIn handleNormalLogin={handleNormalLogin} />
+      ) : (
+        <>
+          <h1>Panel de Administración</h1>
+          <button onClick={handleLogout} style={{ marginBottom: '20px' }}>
+            Cerrar sesión
+          </button>
+          <table className="score-table">
+            <thead>
+              <tr>
+                <th>Ranking</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Contacto</th>
+                <th>Tickets</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedUsers.map((user, index) => (
+                <tr key={user.id}>
+                  <td>{index + 1}</td>
+                  <td>{user.id}</td>
+                  <td>{user.name}</td>
+                  <td>{user.contacto}</td>
+                  <td>{user.score}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p style={{ marginTop: '20px', fontWeight: 'bold' }}>
+            {totalTickets} de 225 casillas reveladas
+          </p>
+        </>
+      )}
     </div>
   );
 }

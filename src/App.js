@@ -88,12 +88,12 @@ const App = () => {
                 />
               )}
               {showLogin && (
-                <LoginGeneral
+                <LoginGeneral // THIS
                   onInstagramLogin={handleInstagramLogin}
                   onFacebookLogin={handleFacebookLogin}
                   onGoogleSuccess={handleGoogleSuccess}
                   onGoogleFailure={handleGoogleFailure}
-                  handleNormalLogin={handleNormalLogin}
+                  handleNormalLogin={handleNormalLogin} 
                 />
               )}
             </>
