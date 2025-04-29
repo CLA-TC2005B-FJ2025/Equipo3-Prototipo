@@ -4,18 +4,16 @@ import Header from './components/Header';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
-import useSolvedCells from './hooks/useSolvedCells';
-import useLogin from './components/LogIn/UseLogIn';
+import useLogin from './components/LogIn/UseLogIn'; // Hook con la lógica de login
 import './index.css';
-import logo from '../src/assets/imagenes/Mulaka.jpg';
-import LoginGeneral from './components/LogIn/LoginGeneral';
+import logo from '../src/assets/imagenes/LogoLienzo.jpg';
+import LoginGeneral from './components/LogIn/LoginGeneral'; // Nuevo nombre claro
+import AnswerInput from './components/AnswerInput';
+import useSolvedCells from './hooks/useSolvedCells';
 import RecoveryPage from './components/LogIn/RecoveryPage';
-
 
 const App = () => {
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
-  const { solved, toggle } = useSolvedCells();
-  const currentCellRef = useRef(null);
   const { 
     username, showLogin, 
     handleFacebookLogin, handleInstagramLogin, 
@@ -51,6 +49,8 @@ const App = () => {
                 size={600}
                 side={15}
               />
+                 <AnswerInput />
+                  
               {popupMode && (
                 <Popup
                   mode={popupMode}
