@@ -11,6 +11,7 @@ import LoginGeneral from './components/LogIn/LoginGeneral'; // Nuevo nombre clar
 import AnswerInput from './components/AnswerInput';
 import useSolvedCells from './hooks/useSolvedCells';
 import RecoveryPage from './components/LogIn/RecoveryPage';
+import Cookies from 'js-cookie';
 
 const App = () => {
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
@@ -29,13 +30,35 @@ const App = () => {
     openQuestion(num);
   };
 
-  const handleAnswerWithSolved = (answer, auto) => {
-    const wasCorrect = handleAnswer(answer, auto);
-    if (wasCorrect) {
-      toggle(currentCellRef.current);
-    }
-  };
+  const addTicket = async () => {
+      const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
+      const idUsuario = Cookies.get('idUsuario');
+      if (!idUsuario) return;           // todavía no logueado
+    
+      try {
+        await fetch(`${baseUrl}/boleto`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tipo: false, idUsuario: Number(idUsuario) })
+        });
+        console.log('Boleto añadido');
+      } catch (err) {
+        console.error('Error creando boleto:', err);
+      }
+    };
 
+  const handleAnswerWithSolved = (answer, auto) => {
+    const wasCorrect = handleAnswer(answer, auto); // ← devuelve true|false
+    console.log(`Resultado de WasCorrect ${wasCorrect}`);
+    console.log('resueltas ->', [...solved]);
+    if (wasCorrect) 
+      {
+      toggle(currentCellRef.current);              // marcamos la casilla
+      addTicket();
+      console.log('resueltas ->', [...solved]);
+      }
+    };
+    
   return (
     <>
       <Header username={username} onLogout={handleLogout} />
