@@ -27,7 +27,7 @@ export const registrarIntentoCorrecto = async (idCasilla, idImagen) => {
 export const registrarIntentoIncorrecto = async (opcionElegida, idCasilla, idImagen) => {
   const idUsuario = Cookies.get('idUsuario');
   if (!idUsuario) return;
-
+    console.log(opcionElegida)
   try {
     const res = await fetch(`${baseUrl}/intentoIncorrecto`, {
       method: 'POST',

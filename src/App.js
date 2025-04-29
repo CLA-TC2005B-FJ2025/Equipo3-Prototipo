@@ -111,7 +111,8 @@ const App = () => {
       addTicket(false);
       refreshTickets();
     } else {
-      await registrarIntentoIncorrecto(answer.option, currentCellRef.current, 1);
+      console.log('Respuesta incorrecta', answer.option)
+      await registrarIntentoIncorrecto('opcion' + answer.option, currentCellRef.current, 1);
       liberarCasilla(currentCellRef.current);
     }
   };
