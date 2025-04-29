@@ -1,17 +1,20 @@
 import React from 'react';
 import './Grid.css';
-import logo from '../assets/imagenes/LogoLienzo.jpg'
+import logo from '../assets/imagenes/LogoLienzo.jpg';
 
 const Grid = ({
   side = 15,
   size = 600,
-
   onItemClick,
   solvedCells = new Set(),
-  bgImage = logo
+  bgImage = logo,
+  casillas = []
 }) => {
   const total = side * side;
   const cells = Array.from({ length: total }, (_, i) => i + 1);
+
+  // Mapear el estado de casillas para rápido acceso
+  const casillasMap = new Map(casillas.map(c => [c.idCasilla, c]));
 
   return (
     <div
@@ -23,32 +26,43 @@ const Grid = ({
         backgroundImage: `url(${logo})`
       }}
     >
-{cells.map((n) => {
-  const isRevealed = solvedCells.has(n);
+      {cells.map((n) => {
+        const casilla = casillasMap.get(n);
+        const estado = casilla?.estado || 'libre';
+        const x = casilla?.coordenadaX || ((n - 1) % side);
+        const y = casilla?.coordenadaY || Math.floor((n - 1) / side);
 
-  const cellStyle = isRevealed
-    ? {
-        backgroundImage: `url(${bgImage})`,
-        backgroundSize: `${side * 100}% ${side * 100}%`,
-        backgroundPosition: `${
-          ((n - 1) % side) * (100 / (side - 1))
-        }% ${Math.floor((n - 1) / side) * (100 / (side - 1))}%`,
-      }
-    : {};
+        const isRevealed = estado === 'descubierta';
+        const isOccupied = estado === 'ocupada';
 
-  return (
-    <div
-      key={n}
-      className={`grid-item${isRevealed ? ' revealed' : ''}`}
-      style={cellStyle}
-      onClick={() => !isRevealed && onItemClick?.(n)}
-    />
-  );
-})}
+        let cellStyle = {};
 
+        if (isRevealed) {
+          // CASILLA DESCUBIERTA: mostrar fragmento de imagen
+          cellStyle = {
+            backgroundImage: `url(${process.env.REACT_APP_URL_IMAGEN}/fragmento/${x}/${y})`,
+            backgroundSize: `${side * 100}% ${side * 100}%`,
+            backgroundPosition: `${x * (100 / (side - 1))}% ${y * (100 / (side - 1))}%`,
+          };
+        } else if (isOccupied) {
+          // CASILLA OCUPADA: ponerle color diferente
+          cellStyle = {
+            border: '2px solid #00FFFF',   // borde blanco brillante
+            boxShadow: '0 0 10px #00FFFF', // brillo alrededor
+          };
+        }
+
+        return (
+          <div
+            key={n}
+            className={`grid-item ${estado}`}
+            style={cellStyle}
+            onClick={() => estado === 'libre' && onItemClick?.(n)}
+          />
+        );
+      })}
     </div>
   );
 };
 
 export default Grid;
-
