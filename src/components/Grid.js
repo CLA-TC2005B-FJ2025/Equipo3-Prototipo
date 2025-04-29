@@ -1,6 +1,6 @@
 import React from 'react';
 import './Grid.css';
-import logo from '../assets/imagenes/FondoNegro.jpg'
+import logo from '../assets/imagenes/LogoLienzo.jpg'
 
 const Grid = ({
   side = 15,

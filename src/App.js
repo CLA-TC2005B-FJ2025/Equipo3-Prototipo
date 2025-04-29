@@ -7,7 +7,7 @@ import usePopup from './hooks/usePopup';
 import useSolvedCells from './hooks/useSolvedCells';
 import useLogin from './components/LogIn/UseLogIn'; // Hook con la lógica de login
 import './index.css';
-import logo from '../src/assets/imagenes/LogoLienzo.jpg';
+import logo from '../src/assets/imagenes/Mulaka.jpg';
 import LoginGeneral from './components/LogIn/LoginGeneral'; // Nuevo nombre claro
 
 const App = () => {
