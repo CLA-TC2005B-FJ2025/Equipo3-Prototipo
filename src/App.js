@@ -1,13 +1,13 @@
-import React, { useState, useRef } from 'react';
-import { Routes, Route } from 'react-router-dom'; // SOLO Routes y Route aquí
+import React, { useState, useRef, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
-import useLogin from './components/LogIn/UseLogIn'; // Hook con la lógica de login
+import useLogin from './components/LogIn/UseLogIn';
 import './index.css';
 import logo from '../src/assets/imagenes/Mulaka.jpg';
-import LoginGeneral from './components/LogIn/LoginGeneral'; // Nuevo nombre claro
+import LoginGeneral from './components/LogIn/LoginGeneral';
 import AnswerInput from './components/AnswerInput';
 import useSolvedCells from './hooks/useSolvedCells';
 import RecoveryPage from './components/LogIn/RecoveryPage';
@@ -15,41 +15,104 @@ import Cookies from 'js-cookie';
 import useTickets from './hooks/useTickets';
 import CrearCuenta from './components/LogIn/CrearCuenta';
 import { addTicket } from './utils/ticketService';
+import useCasillas from './hooks/useCasillas';
 
 const App = () => {
   const { ticketCount, refresh: refreshTickets } = useTickets();
   const { popupMode, popupData, openQuestion, handleAnswer, closePopup, timeLeft } = usePopup();
   const { solved, toggle } = useSolvedCells();
-  const currentCellRef = useRef(null);
-  const { 
-    username, showLogin, 
-    handleFacebookLogin, handleInstagramLogin, 
-    handleGoogleSuccess, handleGoogleFailure, 
-    handleLogout, handleNormalLogin 
+  const { casillas, fetchCasillas } = useCasillas();
+  const currentCellRef = useRef(null);
+
+  const {
+    username, showLogin,
+    handleFacebookLogin, handleInstagramLogin,
+    handleGoogleSuccess, handleGoogleFailure,
+    handleLogout, handleNormalLogin
   } = useLogin();
 
-  const handleCellClick = (num) => {
-    if (solved.has(num)) return;
-    currentCellRef.current = num;
-    openQuestion(num);
+  useEffect(() => {
+    if (!Array.isArray(casillas)) return;
+    console.log('Casillas recibidas:', casillas);
+    const descubiertas = casillas.filter(c => c.estado === 'descubierta');
+    console.log('Casillas descubiertas:', descubiertas);
+  }, [casillas]);
+
+  const ocuparCasilla = async (idCasilla) => {
+    try {
+      await fetch(`${process.env.REACT_APP_URL_IMAGEN}/casilla/ocupar`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idCasilla, idImagen: 1 })
+      });
+      console.log(`Casilla ${idCasilla} ocupada`);
+      fetchCasillas();
+    } catch (err) {
+      console.error('Error ocupando casilla:', err);
+    }
   };
 
+  const handleCellClick = async (idCasilla) => {
+    console.log('Click en casilla:', idCasilla);
 
-  const handleAnswerWithSolved = (answer, auto) => {
-    const wasCorrect = handleAnswer(answer, auto); // ← devuelve true|false
-    console.log(`Resultado de WasCorrect ${wasCorrect}`);
-    console.log('resueltas ->', [...solved]);
-    if (wasCorrect) 
-      {
-      addTicket(false); // movi la funcion de addTicket a /utils/ticketService porque la utilizaba en otro lugar
-      toggle(currentCellRef.current);              // marcamos la casilla
-      
-      refreshTickets();
-      console.log('resueltas ->', [...solved]);
-      
+    try {
+      const res = await fetch(`${process.env.REACT_APP_URL_CRUD_SERVER}/casilla/${idCasilla}`);
+      if (!res.ok) throw new Error('Error consultando casilla');
+
+      const cell = await res.json();
+
+      if (cell.estado === 'libre') {
+        console.log('Casilla libre');
+        currentCellRef.current = idCasilla;
+        openQuestion(cell.idPregunta);
+        ocuparCasilla(idCasilla);
+      } else {
+        console.log('Casilla no disponible:', cell.estado);
       }
-    };
-    
+    } catch (error) {
+      console.error('Error buscando casilla:', error);
+    }
+  };
+
+  const liberarCasilla = async (idCasilla) => {
+    try {
+      await fetch(`${process.env.REACT_APP_URL_IMAGEN}/casilla/liberar`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idCasilla, idImagen: 1 })
+      });
+      console.log(`Casilla ${idCasilla} liberada`);
+    } catch (error) {
+      console.error('Error liberando casilla:', error);
+    }
+  };
+
+  const descubrirCasilla = async (idCasilla) => {
+    try {
+      await fetch(`${process.env.REACT_APP_URL_IMAGEN}/casilla/descubrir`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idCasilla, idImagen: 1 })
+      });
+      console.log(`Casilla ${idCasilla} descubierta`);
+      fetchCasillas();
+    } catch (err) {
+      console.error('Error descubriendo casilla:', err);
+    }
+  };
+
+  const handleAnswerWithSolved = async (answer, auto) => {
+    const wasCorrect = handleAnswer(answer, auto);
+
+    if (wasCorrect) {
+      descubrirCasilla(currentCellRef.current);
+      addTicket(false);
+      refreshTickets();
+    } else {
+      liberarCasilla(currentCellRef.current);
+    }
+  };
+
   return (
     <>
       <Header
@@ -66,11 +129,13 @@ const App = () => {
                 onItemClick={handleCellClick}
                 bgImage={logo}
                 solvedCells={solved}
+                casillas={Array.isArray(casillas) ? casillas : []}
                 size={600}
                 side={15}
               />
-                 <AnswerInput />
-                  
+
+              <AnswerInput />
+
               {popupMode && (
                 <Popup
                   mode={popupMode}
@@ -79,6 +144,7 @@ const App = () => {
                   onAnswer={handleAnswerWithSolved}
                 />
               )}
+
               {showLogin && (
                 <LoginGeneral
                   onInstagramLogin={handleInstagramLogin}
