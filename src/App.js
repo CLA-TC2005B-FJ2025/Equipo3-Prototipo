@@ -17,6 +17,7 @@ import CrearCuenta from './components/LogIn/CrearCuenta';
 import { addTicket } from './utils/ticketService';
 import { registrarIntentoCorrecto, registrarIntentoIncorrecto } from './utils/intentosService';
 import useCasillas from './hooks/useCasillas';
+import PageAdmin from './components/PagAdmin/PagAdmin';
 
 const App = () => {
   const { ticketCount, refresh: refreshTickets } = useTickets();
