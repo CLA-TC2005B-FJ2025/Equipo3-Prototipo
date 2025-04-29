@@ -70,13 +70,17 @@ function PagAdmin() {
         /* 2· para cada pregunta, obtener #intentos y texto */
         const rows = await Promise.all(
           cas.map(async c => {
+            //const pregunares = await fetch
             const intentosRes = await fetch(`${baseUrl}/preguntaIntentos/${c.idPregunta}`);
-            const { pregunta, intentosIncorrectos } = await intentosRes.json();
+            const {cantidad } = await intentosRes.json();
+            const preguntares = await fetch(`${baseUrl}/pregunta/${c.idPregunta}`);
+            const pregunta2  = await preguntares.json();
+            const pregunta = pregunta2.pregunta;
 
             return {
               idPregunta: c.idPregunta,
               pregunta,
-              intentos: intentosIncorrectos,
+              intentos: cantidad,
               estado: c.estado
             };
           })
@@ -92,6 +96,7 @@ function PagAdmin() {
 
   /* ──────────────── utilidades render ──────────────── */
   const sortedUsers  = [...users].sort((a, b) => b.score - a.score);
+  const sortedStats = [...statsPregunta].sort((a,b)=> b.intentos - a.intentos);
   const totalTickets = users.reduce((sum, u) => sum + u.score, 0);
 
   /* ──────────────── render ──────────────── */
@@ -140,17 +145,17 @@ function PagAdmin() {
           </table>
 
           {/* ───────── tabla estadísticas por pregunta ───────── */}
-          <table className="Estadisticas_Pregunta">
+          <table className="score-table">
             <thead>
               <tr>
-                <th>ID Pregunta</th>
+                <th>ID</th>
                 <th>Pregunta</th>
                 <th>Intentos incorrectos</th>
-                <th>Estado casilla</th>
+                <th>Estado</th>
               </tr>
             </thead>
             <tbody>
-              {statsPregunta.map(row => (
+              {sortedStats.map(row => (
                 <tr key={row.idPregunta}>
                   <td>{row.idPregunta}</td>
                   <td style={{ textAlign: 'left' }}>{row.pregunta}</td>
