@@ -40,9 +40,7 @@ const Grid = ({
         if (isRevealed) {
           // CASILLA DESCUBIERTA: mostrar fragmento de imagen
           cellStyle = {
-            backgroundImage: `url(${process.env.REACT_APP_URL_IMAGEN}/fragmento/${x}/${y})`,
-            backgroundSize: `${side * 100}% ${side * 100}%`,
-            backgroundPosition: `${x * (100 / (side - 1))}% ${y * (100 / (side - 1))}%`,
+            backgroundImage: `url(${process.env.REACT_APP_URL_IMAGEN}/fragmento/${x}/${y})`
           };
         } else if (isOccupied) {
           // CASILLA OCUPADA: ponerle color diferente
