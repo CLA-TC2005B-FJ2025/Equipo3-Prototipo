@@ -5,23 +5,22 @@ const usePopup = () => {
   const [popupData, setPopupData] = useState(null);
   const [correctOption, setCorrectOption] = useState(null);
   const [timeLeft, setTimeLeft] = useState(30);
+  const [wasAnsweredCorrectly, setWasAnsweredCorrectly] = useState(false); // 👈 nuevo
   const timerRef = useRef(null);
   const answeredRef = useRef(false); // <- para evitar múltiples respuestas automáticas
 
   useEffect(() => {
     if (popupMode === 'question') {
-      answeredRef.current = false; // resetear al abrir una nueva pregunta
+      answeredRef.current = false;
+      setWasAnsweredCorrectly(false); // 👈 resetear al abrir nueva pregunta
 
       timerRef.current = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
             clearInterval(timerRef.current);
-
-            // Si no ha respondido el usuario, marcar incorrecta automáticamente
             if (!answeredRef.current) {
               handleAnswer({ option: null, text: 'Sin respuesta (tiempo agotado)' }, true);
             }
-
             return 0;
           }
           return prev - 1;
@@ -51,30 +50,34 @@ const usePopup = () => {
     } catch (error) {
       console.error(`Error al obtener la pregunta ${num}:`, error);
     }
-  };  
+  };
 
   const handleAnswer = (answer, auto = false) => {
     clearInterval(timerRef.current);
     answeredRef.current = true;
 
     const isCorrect = answer.option === correctOption;
-    console.log(isCorrect);
- 
+    setWasAnsweredCorrectly(isCorrect); // 👈 aquí lo guardamos
+
     setPopupMode(isCorrect ? 'correct' : 'incorrect');
     setPopupData({
       option: answer.option,
       text: auto ? 'Sin respuesta (tiempo agotado)' : answer.text,
     });
+
     return isCorrect;
   };
 
   const closePopup = () => {
     clearInterval(timerRef.current);
+    const result = wasAnsweredCorrectly; // 👈 lo guardamos antes de resetear
     setPopupMode(null);
     setPopupData(null);
     setCorrectOption(null);
     setTimeLeft(30);
+    setWasAnsweredCorrectly(false); // 👈 limpiar para siguiente pregunta
     answeredRef.current = false;
+    return result; // 👈 lo devolvemos
   };
 
   return {

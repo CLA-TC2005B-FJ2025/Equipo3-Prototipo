@@ -191,10 +191,19 @@ const App = () => {
                 <Popup
                   mode={popupMode}
                   data={{ ...popupData, timeLeft }}
-                  onClose={closePopup}
+                  onClose={() => {
+                    const fueCorrecta = closePopup();
+                    if (fueCorrecta && currentCellRef.current) {
+                      descubrirCasilla(currentCellRef.current);
+                      refreshTickets();
+                    } else if (currentCellRef.current) {
+                      liberarCasilla(currentCellRef.current);
+                    }
+                  }}
                   onAnswer={handleAnswerWithSolved}
                 />
               )}
+
 
               {showLogin && (
                 <LoginGeneral // THIS
