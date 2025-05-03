@@ -109,11 +109,6 @@ export default function useLogin() { // THIS
     }, { scope: 'public_profile' });
   };
   
-  // LOGIN SOCIAL - Instagram (pendiente)
-  const handleInstagramLogin = () => {
-    alert('Login de Instagram aún no implementado');
-  };
-
   const handleGoogleSuccess = async (credentialResponse) => {
     const decoded = jwtDecode(credentialResponse.credential);
     console.log('Usuario Google:', decoded);
@@ -163,7 +158,6 @@ export default function useLogin() { // THIS
     username,
     handleNormalLogin,
     handleFacebookLogin,
-    handleInstagramLogin,
     handleGoogleSuccess,
     handleGoogleFailure,
     handleLogout,

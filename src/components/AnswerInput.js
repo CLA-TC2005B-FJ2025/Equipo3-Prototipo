@@ -1,7 +1,7 @@
 // AnswerInput.js
 import React, { useState } from 'react';
 import useAnswerInput from '../hooks/useAnswerInput';
-import './AnswerInput.css';
+import './Estilos/AnswerInput.css';
 
 const AnswerInput = () => {
   const [answer, setAnswer] = useState("");

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Footer.css';
+import './Estilos/Footer.css';
 
 const Footer = () => (
   <footer className="footer">

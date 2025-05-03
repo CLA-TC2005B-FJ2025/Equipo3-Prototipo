@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import LoginPage from './LoginPage'; // Para login social
-import './LoginGeneral.css';
+import './Estilos/LoginGeneral.css';
 import { Link } from 'react-router-dom';
 import useTickets from '../../hooks/useTickets';
 
 
 const LoginGeneral = ({ 
-  onInstagramLogin, onFacebookLogin, 
+  onFacebookLogin, 
   onGoogleSuccess, onGoogleFailure,
   handleNormalLogin // Ahora viene como prop desde App
 }) => {
@@ -59,7 +59,6 @@ const LoginGeneral = ({
 
         <hr style={{ margin: '20px 0', borderColor: '#ccc' }} />
         <LoginPage
-          onInstagramLogin={onInstagramLogin}
           onFacebookLogin={onFacebookLogin}
           onGoogleSuccess={onGoogleSuccess}
           onGoogleFailure={onGoogleFailure}

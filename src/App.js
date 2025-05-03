@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
-import useLogin from './components/LogIn/UseLogIn';
+import useLogin from './components/LogIn/hooks/UseLogIn';
 //import './index.css';
 import logo from '../src/assets/imagenes/Mulaka.jpg';
 import LoginGeneral from './components/LogIn/LoginGeneral';
@@ -19,7 +19,7 @@ import { registrarIntentoCorrecto, registrarIntentoIncorrecto } from './utils/in
 import useCasillas from './hooks/useCasillas';
 import PageAdmin from './components/PagAdmin/PagAdmin';
 import ComoJugar from './components/ComoJugar';
-import './App.css';
+import './components/Estilos/App.css';
 
 const App = () => {
   const { ticketCount, refresh: refreshTickets } = useTickets();

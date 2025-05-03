@@ -1,5 +1,5 @@
 import React from 'react';
-import './Popup.css';
+import './Estilos/Popup.css';
 
 const Popup = ({ mode, data, onClose, onAnswer }) => {
   const renderContent = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import './ComoJugar.css';
+import './Estilos/ComoJugar.css';
 
 const ComoJugar = () => {
   return (

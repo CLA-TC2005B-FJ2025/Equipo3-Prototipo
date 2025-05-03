@@ -1,6 +1,6 @@
 import React from 'react';
 import UserMenu from './UserMenu';
-import './Header.css';
+import './Estilos/Header.css';
 import logo from '../assets/imagenes/LogoLienzo.jpg';
 
 const Header = ({ username, onLogout, ticketCount }) => {

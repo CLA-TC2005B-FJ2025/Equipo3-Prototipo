@@ -1,8 +1,8 @@
 /* src/components/PagAdmin/PagAdmin.js */
-import './PagAdmin.css';
+import './Estilos/PagAdmin.css';
 import LogIn from './LogIn';
 import React, { useEffect, useState } from 'react';
-import useLogin from '../LogIn/UseLogIn';
+import useLogin from './hooks/UseLogInAdmin';
 import Grid from '../Grid';
 import useCasillas from '../../hooks/useCasillas';
 import logo from '/workspaces/Equipo3-Prototipo/src/assets/imagenes/LogoLienzo.jpg';

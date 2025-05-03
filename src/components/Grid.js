@@ -1,5 +1,5 @@
 import React from 'react';
-import './Grid.css';
+import './Estilos/Grid.css';
 import logo from '../assets/imagenes/LogoLienzo.jpg';
 
 const Grid = ({
