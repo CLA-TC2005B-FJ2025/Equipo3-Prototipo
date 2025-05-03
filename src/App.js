@@ -20,6 +20,7 @@ import useCasillas from './hooks/useCasillas';
 import PageAdmin from './components/PagAdmin/PagAdmin';
 import ComoJugar from './components/ComoJugar';
 import './components/Estilos/App.css';
+import { useCooldown } from './hooks/useCooldown';
 
 const App = () => {
   const { ticketCount, refresh: refreshTickets } = useTickets();
@@ -28,7 +29,7 @@ const App = () => {
   const { casillas, fetchCasillas } = useCasillas();
   const currentCellRef = useRef(null);
   const [users, setUsers] = useState([]);
-
+  const { isInCooldown, setCooldown } = useCooldown();
   const {
     username, showLogin,
     handleFacebookLogin, handleInstagramLogin,
@@ -59,6 +60,12 @@ const App = () => {
 
   const handleCellClick = async (idCasilla) => {
     console.log('Click en casilla:', idCasilla);
+
+    //verificar que la casilla no este en cooldown
+    if (isInCooldown(idCasilla)) {
+      console.log(`Casilla ${idCasilla} está en cooldown`);
+      return;
+    }
 
     try {
       const res = await fetch(`${process.env.REACT_APP_URL_CRUD_SERVER}/casilla/${idCasilla}`);
@@ -117,6 +124,7 @@ const App = () => {
     } else {
       console.log('Respuesta incorrecta', answer.option)
       await registrarIntentoIncorrecto('opcion' + answer.option, currentCellRef.current, 1);
+      setCooldown(currentCellRef.current); // empezar el cooldown
       liberarCasilla(currentCellRef.current);
     }
   };
@@ -164,6 +172,7 @@ const App = () => {
                 casillas={Array.isArray(casillas) ? casillas : []}
                 size={600}
                 side={15}
+                isInCooldown={isInCooldown} // pasar el cooldown
               />
 
               <table className="score-table">

@@ -8,7 +8,9 @@ const Grid = ({
   onItemClick,
   solvedCells = new Set(),
   bgImage = logo,
-  casillas = []
+  casillas = [],
+  isInCooldown = () => false //manejar el cooldown
+
 }) => {
   const total = side * side;
   const cells = Array.from({ length: total }, (_, i) => i + 1);
@@ -48,6 +50,10 @@ const Grid = ({
             border: '2px solid #00FFFF',   // borde blanco brillante
             boxShadow: '0 0 10px #00FFFF', // brillo alrededor
           };
+        } else if (isInCooldown(n)) {
+
+          cellStyle.opacity = 0.5;
+          cellStyle.cursor = 'not-allowed';
         }
 
         return (
@@ -55,7 +61,7 @@ const Grid = ({
             key={n}
             className={`grid-item ${estado}`}
             style={cellStyle}
-            onClick={() => estado === 'libre' && onItemClick?.(n)}
+            onClick={() => {if (estado === 'libre' && !isInCooldown(n)) {onItemClick?.(n);}}} //agregar el cooldown
           />
         );
       })}
