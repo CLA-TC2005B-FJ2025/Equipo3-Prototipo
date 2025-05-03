@@ -14,7 +14,7 @@ export default function useLogin() { // THIS
   });
 
   const [username, setUsername] = useState(() => {
-    return Cookies.get('username') || 'Default, nunca por que esta aqui';
+    return Cookies.get('username') || 'Administrador';
   });
 
   const apiBaseUrl = process.env.REACT_APP_URL_CRUD_SERVER || 'http://127.0.0.1:5000';
@@ -23,7 +23,7 @@ export default function useLogin() { // THIS
   // LOGIN NORMAL (usuario/contraseña)
   const handleNormalLogin = async (usernameInput, passwordInput) => {
     try {
-      const response = await fetch(`${apiBaseUrl}/login`, {
+      const response = await fetch(`${apiBaseUrl}/loginadmin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

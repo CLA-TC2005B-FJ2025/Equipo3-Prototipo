@@ -1,4 +1,3 @@
-/* src/components/PagAdmin/PagAdmin.js */
 import './Estilos/PagAdmin.css';
 import LogIn from './LogIn';
 import React, { useEffect, useState } from 'react';
@@ -6,175 +5,209 @@ import useLogin from './hooks/UseLogInAdmin';
 import Grid from '../Grid';
 import useCasillas from '../../hooks/useCasillas';
 import logo from '/workspaces/Equipo3-Prototipo/src/assets/imagenes/LogoLienzo.jpg';
+import HeaderAdmin from './HeaderAdmin';
+
 
 function PagAdmin() {
-  /* ──────────────── estado ──────────────── */
-  const [users, setUsers]                 = useState([]);
+  const [users, setUsers] = useState([]);
   const [imagenAdivinadaPor, setImagenAdivinadaPor] = useState('pendiente');
-  const [statsPregunta, setStatsPregunta] = useState([]);   // ← NUEVO
+  const [statsPregunta, setStatsPregunta] = useState([]);
+  const [mostrarTablaIntentos, setMostrarTablaIntentos] = useState(false);
+  const [mostrarTablaUsuarios, setMostrarTablaUsuarios] = useState(false);
+  const [mostrarTablaRankin, setMostrarTablaRanking] = useState(false);
+  const [mostrarGrid, setMostrarGrid] = useState(true);
 
-  /* hooks existentes */
   const { casillas } = useCasillas();
   const {
     username, showLogin,
     handleLogout, handleNormalLogin
   } = useLogin();
 
-  /* ──────────────── usuarios + boletos + quién adivinó ──────────────── */
   useEffect(() => {
     const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
-
-    fetch(`${baseUrl}/usuario`)
+  
+    fetch(`${baseUrl}/stats/usuarios`)
       .then(r => r.json())
-      .then(async listaUsuarios => {
-        /* mapea usuarios con sus tickets */
-        const usersWithScores = await Promise.all(
-          listaUsuarios.map(async u => {
-            try {
-              const resT = await fetch(`${baseUrl}/boletousuario/${u.idUsuario}`);
-              const { cantidad = 0 } = await resT.json();
-              return { id: u.idUsuario, name: u.usuario, contacto: u.contacto, score: cantidad };
-            } catch {
-              return { id: u.idUsuario, name: u.usuario, contacto: u.contacto, score: 0 };
-            }
-          })
-        );
-        setUsers(usersWithScores);
-
-        /* quién adivinó la imagen */
-        fetch(`${baseUrl}/imagen`)
-          .then(r => r.json())
-          .then(imagenes => {
-            const img = imagenes[0];
-            if (img?.idUsuario) {
-              const u = usersWithScores.find(us => us.id === img.idUsuario);
-              setImagenAdivinadaPor(u ? u.name : 'pendiente');
-            } else {
-              setImagenAdivinadaPor('pendiente');
-            }
-          })
-          .catch(() => setImagenAdivinadaPor('pendiente'));
+      .then(data => {
+        setUsers(data.usuarios || []);  // Asegúrate de acceder a data.usuarios si así se envía
       })
-      .catch(err => console.error('Error usuarios:', err));
+      .catch(err => console.error('❌ Error cargando usuarios:', err));
   }, []);
+  
 
-  /* ──────────────── estadísticas de preguntas ──────────────── */
   useEffect(() => {
     const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
-
-    const cargarStats = async () => {
-      try {
-        /* 1· obtener casillas para saber idPregunta y estado */
-        const cas = await fetch(`${baseUrl}/casilla`).then(r => r.json());
-
-        /* 2· para cada pregunta, obtener #intentos y texto */
-        const rows = await Promise.all(
-          cas.map(async c => {
-            //const pregunares = await fetch
-            const intentosRes = await fetch(`${baseUrl}/preguntaIntentos/${c.idPregunta}`);
-            const {cantidad } = await intentosRes.json();
-            const preguntares = await fetch(`${baseUrl}/pregunta/${c.idPregunta}`);
-            const pregunta2  = await preguntares.json();
-            const pregunta = pregunta2.pregunta;
-
-            return {
-              idPregunta: c.idPregunta,
-              pregunta,
-              intentos: cantidad,
-              estado: c.estado
-            };
-          })
-        );
-        setStatsPregunta(rows);
-      } catch (err) {
-        console.error('Error cargando stats pregunta:', err);
-      }
-    };
-
-    cargarStats();
+  
+    fetch(`${baseUrl}/stats/preguntas`)
+      .then(r => r.json())
+      .then(data => {
+        setStatsPregunta(data);
+      })
+      .catch(err => console.error('Error cargando stats:', err));
   }, []);
 
-  /* ──────────────── utilidades render ──────────────── */
-  const sortedUsers  = [...users].sort((a, b) => b.score - a.score);
-  const sortedStats = [...statsPregunta].sort((a,b)=> b.intentos - a.intentos);
+  const sortedUsers = [...users].sort((a, b) => b.score - a.score);
+  const sortedStats = [...statsPregunta].sort((a, b) => b.intentos - a.intentos);
   const totalTickets = users.reduce((sum, u) => sum + u.score, 0);
+  const totalIntentosIncorrectos = statsPregunta.reduce((sum, row) => sum + row.intentos, 0);
+  const porcentajeRevelado = casillas.length > 0
+  ? (casillas.filter(c => c.estado === 'descubierta').length / casillas.length) * 100
+  : 0;
 
-  /* ──────────────── render ──────────────── */
+
+  if (showLogin) {
+    return <LogIn handleNormalLogin={handleNormalLogin} />;
+  }
+
   return (
+    <>
+    <HeaderAdmin username={username} onLogout={handleLogout} />
     <div className="admin-page">
-      {/* Mapa de casillas */}
-      <Grid
-        bgImage={logo}
-        solvedCells={[]}           /* puedes cambiar si ocupas solved */
-        casillas={Array.isArray(casillas) ? casillas : []}
-        size={600}
-        side={15}
-      />
-
-      {showLogin ? (
-        <LogIn handleNormalLogin={handleNormalLogin} />
-      ) : (
-        <>
-          <h1>Panel de Administración</h1>
-          <button onClick={handleLogout} style={{ marginBottom: '20px' }}>
-            Cerrar sesión
-          </button>
-
-          {/* ───────── tabla ranking ───────── */}
-          <table className="score-table">
-            <thead>
-              <tr>
-                <th>Ranking</th>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Contacto</th>
-                <th>Tickets</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedUsers.map((u, i) => (
-                <tr key={u.id}>
-                  <td>{i + 1}</td>
-                  <td>{u.id}</td>
-                  <td>{u.name}</td>
-                  <td>{u.contacto}</td>
-                  <td>{u.score}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {/* ───────── tabla estadísticas por pregunta ───────── */}
-          <table className="score-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Pregunta</th>
-                <th>Intentos incorrectos</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedStats.map(row => (
-                <tr key={row.idPregunta}>
-                  <td>{row.idPregunta}</td>
-                  <td style={{ textAlign: 'left' }}>{row.pregunta}</td>
-                  <td>{row.intentos}</td>
-                  <td>{row.estado}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <p style={{ marginTop: '20px', fontWeight: 'bold' }}>
-            {totalTickets} de 225 casillas reveladas
+      <div className="stat-caja-destacada">
+        <h2>Usuario que ha adivinado la imagen</h2>
+        <p>
+          <strong>Usuario:</strong> {imagenAdivinadaPor}
+        </p>
+        <p>
+          <strong>Contacto:</strong> pendiente
+        </p>
+      </div>
+      <div className="stat-box-container">
+        <div 
+              className="stat-box" 
+              onClick={() => setMostrarTablaUsuarios(!mostrarTablaUsuarios)}
+              style={{ cursor: 'pointer' }}
+            >
+              <h2>Boletos Totales:</h2>
+              <p>
+              {totalTickets}
+              </p>
+              <small>Haz clic para {mostrarTablaUsuarios ? 'ocultar' : 'ver'} detalles</small>
+        </div>
+        <div
+          className="stat-box"
+          onClick={() => setMostrarGrid(!mostrarGrid)}
+          style={{
+            backgroundColor: porcentajeRevelado > 75
+              ? '#4caf50' // verde
+              : porcentajeRevelado > 40
+              ? '#ff9800' // naranja
+              : '#e53935', // rojo
+            color: 'white',
+            cursor: 'pointer',
+            transition: 'background-color 0.3s ease'
+          }}
+        >
+          <h2>Porcentaje Imagen Revelada</h2>
+          <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#fff' }}>
+            {porcentajeRevelado.toFixed(1)}%
           </p>
-          <p style={{ marginTop: '10px', fontWeight: 'bold' }}>
-            Usuario que ha adivinado la imagen: {imagenAdivinadaPor}
-          </p>
-        </>
+          <small>Haz clic para {mostrarGrid ? 'ocultar' : 'ver'} el grid</small>
+        </div>
+        <div
+          className="stat-box"
+          onClick={() => setMostrarTablaRanking(!mostrarTablaRankin)}
+          style={{ cursor: 'pointer' }}
+        >
+          <h2>Total de Usuarios</h2>
+          <p>{users.length}</p>
+          <small>Haz clic para {mostrarTablaRankin ? 'ocultar' : 'ver'} ranking</small>
+        </div>
+        <div 
+            className="stat-box" 
+            onClick={() => setMostrarTablaIntentos(!mostrarTablaIntentos)}
+            style={{ cursor: 'pointer' }}
+          >
+            <h2>Total de Intentos Incorrectos</h2>
+            <p>
+              {totalIntentosIncorrectos}
+            </p>
+            <small>Haz clic para {mostrarTablaIntentos ? 'ocultar' : 'ver'} detalles</small>
+          </div>
+      </div>
+
+      {mostrarGrid && (
+        <Grid
+          bgImage={logo}
+          solvedCells={[]}
+          casillas={Array.isArray(casillas) ? casillas : []}
+          size={600}
+          side={15}
+        />
+      )}
+
+
+      {mostrarTablaRankin && (
+        <table className="score-table">
+          <thead>
+            <tr>
+              <th>Ranking</th>
+              <th>Usuario</th>
+              <th>Tickets</th>
+            </tr>
+          </thead>
+          <tbody>
+          {sortedUsers.map((u, i) => (
+            <tr key={u.idUsuario}>
+              <td>{i + 1}</td>
+              <td>{u.usuario}</td>
+              <td>{u.score}</td>
+            </tr>
+          ))}
+          </tbody>
+        </table>
+      )}
+
+      {mostrarTablaUsuarios && (
+        <table className="score-table">
+          <thead>
+            <tr>
+              <th>Ranking</th>
+              <th>ID</th>
+              <th>Usuario</th>
+              <th>Contacto</th>
+              <th>Tickets</th>
+            </tr>
+          </thead>
+          <tbody>
+          {sortedUsers.map((u, i) => (
+            <tr key={u.idUsuario}>
+              <td>{i + 1}</td>
+              <td>{u.idUsuario}</td>
+              <td>{u.usuario}</td>
+              <td>{u.contacto}</td>
+              <td>{u.score}</td>
+            </tr>
+          ))}
+          </tbody>
+        </table>
+      )}
+
+
+      {mostrarTablaIntentos && (
+        <table className="score-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Pregunta</th>
+              <th>Intentos incorrectos</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedStats.map(row => (
+              <tr key={row.idPregunta}>
+                <td>{row.idPregunta}</td>
+                <td style={{ textAlign: 'left' }}>{row.pregunta}</td>
+                <td>{row.intentos}</td>
+                <td>{row.estado}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
+  </>
   );
 }
 

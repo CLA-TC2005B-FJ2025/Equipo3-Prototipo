@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation} from 'react-router-dom';
 import Header from './components/Header';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
@@ -120,13 +120,19 @@ const App = () => {
     }
   };
 
+  const location = useLocation();
+
+
   return (
     <>
-      <Header
-        username={username}
-        onLogout={handleLogout}
-        ticketCount={ticketCount}
-      />
+      {location.pathname !== "/admin" && (
+        <Header
+          username={username}
+          onLogout={handleLogout}
+          ticketCount={ticketCount}
+        />
+      )}
+
 
       <main style={{ padding: '1rem' }}>
         <Routes>
