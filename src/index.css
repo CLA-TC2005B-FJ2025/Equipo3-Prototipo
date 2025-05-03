@@ -8,4 +8,9 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom, #fbe7dd 0%, #cd6a5c 100%);
+  padding: 0;
 }

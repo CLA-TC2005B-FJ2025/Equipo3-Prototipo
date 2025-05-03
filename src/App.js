@@ -5,7 +5,7 @@ import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
 import useLogin from './components/LogIn/UseLogIn';
-import './index.css';
+//import './index.css';
 import logo from '../src/assets/imagenes/Mulaka.jpg';
 import LoginGeneral from './components/LogIn/LoginGeneral';
 import AnswerInput from './components/AnswerInput';
@@ -18,6 +18,8 @@ import { addTicket } from './utils/ticketService';
 import { registrarIntentoCorrecto, registrarIntentoIncorrecto } from './utils/intentosService';
 import useCasillas from './hooks/useCasillas';
 import PageAdmin from './components/PagAdmin/PagAdmin';
+import ComoJugar from './components/ComoJugar';
+import './App.css';
 
 const App = () => {
   const { ticketCount, refresh: refreshTickets } = useTickets();
@@ -130,6 +132,11 @@ const App = () => {
         <Routes>
           <Route path="/" element={
             <>
+            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+              <a href="/comojugar" className="como-jugar-link">
+                ¿Cómo Jugar?
+              </a>
+            </div>
               <Grid
                 onItemClick={handleCellClick}
                 bgImage={logo}
@@ -164,6 +171,7 @@ const App = () => {
           <Route path="/admin" element={<PageAdmin />} />
           <Route path="/recuperar" element={<RecoveryPage />} />
           <Route path="/crearcuenta" element={<CrearCuenta />} />
+          <Route path="/comojugar" element={<ComoJugar />} />
         </Routes>
       </main>
     </>

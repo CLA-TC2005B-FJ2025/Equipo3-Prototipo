@@ -21,4 +21,45 @@
     cursor: pointer;
     color: var(--white);
   }
+
+  .header-link {
+    color: white;                 /* Letras blancas */
+    font-weight: bold;           /* Letras gruesas */
+    margin: 0 1rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;       /* Sin subrayado */
+    display: inline-block;
+  }
+  
+  .header-link:hover {
+    background-color: #fcbf3d;   /* Fondo rectangular en hover */
+    color: #4a2424;              /* Contraste al pasar el mouse */
+    text-decoration: none;
+  }
+  
+  .tickets {
+    display: flex;
+    align-items: center;
+    justify-content: center;     /* CENTRA los tickets horizontalmente */
+    font-weight: bold;
+    color: white;
+    margin: 0 auto;              /* Que ocupe espacio central */
+  }
+
+.header-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 10px; /* espacio entre logo e h1 */
+}
   
