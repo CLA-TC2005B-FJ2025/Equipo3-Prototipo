@@ -27,6 +27,7 @@ const App = () => {
   const { solved, toggle } = useSolvedCells();
   const { casillas, fetchCasillas } = useCasillas();
   const currentCellRef = useRef(null);
+  const [users, setUsers] = useState([]);
 
   const {
     username, showLogin,
@@ -122,6 +123,18 @@ const App = () => {
 
   const location = useLocation();
 
+  useEffect(() => {
+    const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
+  
+    fetch(`${baseUrl}/stats/usuarios`)
+      .then(r => r.json())
+      .then(data => {
+        setUsers(data.usuarios || []);  // Asegúrate de acceder a data.usuarios si así se envía
+      })
+      .catch(err => console.error('❌ Error cargando usuarios:', err));
+  }, []);
+
+  const sortedUsers = [...users].sort((a, b) => b.score - a.score);
 
   return (
     <>
@@ -143,6 +156,7 @@ const App = () => {
                 ¿Cómo Jugar?
               </a>
             </div>
+            <div className="grid-ranking-container">
               <Grid
                 onItemClick={handleCellClick}
                 bgImage={logo}
@@ -152,7 +166,26 @@ const App = () => {
                 side={15}
               />
 
-              <AnswerInput />
+              <table className="score-table">
+                <thead>
+                  <tr>
+                    <th>Ranking</th>
+                    <th>Usuario</th>
+                    <th>Tickets</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedUsers.slice(0, 10).map((u, i) => (
+                    <tr key={u.idUsuario}>
+                      <td>{i + 1}</td>
+                      <td>{u.usuario}</td>
+                      <td>{u.score}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <AnswerInput/>
+            </div>
 
               {popupMode && (
                 <Popup
