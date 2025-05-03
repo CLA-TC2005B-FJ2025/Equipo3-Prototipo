@@ -10,7 +10,7 @@ import HeaderAdmin from './HeaderAdmin';
 
 function PagAdmin() {
   const [users, setUsers] = useState([]);
-  const [imagenAdivinadaPor, setImagenAdivinadaPor] = useState('pendiente');
+  const [imagenAdivinadaPor, setImagenAdivinadaPor] = useState({ nombre: 'pendiente', contacto: 'pendiente' });
   const [statsPregunta, setStatsPregunta] = useState([]);
   const [mostrarTablaIntentos, setMostrarTablaIntentos] = useState(false);
   const [mostrarTablaUsuarios, setMostrarTablaUsuarios] = useState(false);
@@ -22,6 +22,7 @@ function PagAdmin() {
     username, showLogin,
     handleLogout, handleNormalLogin
   } = useLogin();
+  
 
   useEffect(() => {
     const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
@@ -35,6 +36,32 @@ function PagAdmin() {
   }, []);
   
 
+  useEffect(() => {
+    const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
+  
+    fetch(`${baseUrl}/imagen`)
+      .then(r => r.json())
+      .then(imagenes => {
+        const img = imagenes.find(i => i.idUsuario); // primera con idUsuario asignado
+        if (!img) return;
+  
+        fetch(`${baseUrl}/usuario/${img.idUsuario}`)
+          .then(r => r.json())
+          .then(usuario => {
+            setImagenAdivinadaPor({
+              nombre: usuario.usuario,
+              contacto: usuario.contacto
+            });
+          })
+          .catch(err => {
+            console.error("❌ Error buscando usuario que adivinó la imagen:", err);
+          });
+      })
+      .catch(err => console.error("❌ Error obteniendo imagen:", err));
+  }, []);
+  
+
+  
   useEffect(() => {
     const baseUrl = process.env.REACT_APP_URL_CRUD_SERVER;
   
@@ -53,11 +80,23 @@ function PagAdmin() {
   const porcentajeRevelado = casillas.length > 0
   ? (casillas.filter(c => c.estado === 'descubierta').length / casillas.length) * 100
   : 0;
+  
 
 
   if (showLogin) {
     return <LogIn handleNormalLogin={handleNormalLogin} />;
   }
+
+  const tipoUsuario = sessionStorage.getItem('tipoUsuario');
+  if (tipoUsuario !== 'admin') {
+    return (
+      <div className="admin-page">
+        <h2 style={{ color: 'red' }}>Acceso restringido</h2>
+        <p>Esta página solo está disponible para administradores.</p>
+      </div>
+    );
+  }
+
 
   return (
     <>
@@ -66,12 +105,13 @@ function PagAdmin() {
       <div className="stat-caja-destacada">
         <h2>Usuario que ha adivinado la imagen</h2>
         <p>
-          <strong>Usuario:</strong> {imagenAdivinadaPor}
+          <strong>Usuario:</strong> {imagenAdivinadaPor.nombre}
         </p>
         <p>
-          <strong>Contacto:</strong> pendiente
+          <strong>Contacto:</strong> {imagenAdivinadaPor.contacto}
         </p>
       </div>
+
       <div className="stat-box-container">
         <div 
               className="stat-box" 

@@ -37,12 +37,16 @@ export default function useLogin() { // THIS
         setIsLoggedIn(true);
         setShowLogin(false);
         setUsername(data.username);
+        
 
         // Guardar en cookies
         Cookies.set('username', data.username, { expires: 7 });
         if (data.idUsuario) {
           Cookies.set('idUsuario', data.idUsuario, { expires: 7 });
         }
+
+        sessionStorage.setItem('tipoUsuario', 'admin');  // 👈 Esto es clave
+
 
         return true;
       } else {
