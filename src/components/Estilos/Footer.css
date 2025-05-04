@@ -21,4 +21,17 @@
   .social-icons a:hover {
     transform: scale(1.2);
   }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
+    filter: brightness(0) invert(1); /* blanco sobre fondo oscuro */
+    transition: transform 0.2s;
+  }
+  
+  .icon:hover {
+    transform: scale(1.2);
+  }
+  
   

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Routes, Route, useLocation} from 'react-router-dom';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Grid from './components/Grid';
 import Popup from './components/Popup';
 import usePopup from './hooks/usePopup';
@@ -146,6 +147,7 @@ const App = () => {
 
   return (
     <>
+    <div className="app-container">
       {location.pathname !== "/admin" && (
         <Header
           username={username}
@@ -231,6 +233,8 @@ const App = () => {
           <Route path="/comojugar" element={<ComoJugar />} />
         </Routes>
       </main>
+      <Footer/>
+      </div>
     </>
   );
 };
