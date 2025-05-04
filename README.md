@@ -23,3 +23,7 @@ npm start
 
 Recuerda hacer público el puerto correspondiente. 
 
+### Para realizar pruebas unitarias:
+```sh
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom @testing-library/user-event
+```
