@@ -31,12 +31,19 @@ export default function useLogin() { // THIS
     };
 
     (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
+      let js = d.createElement(s);
+      js.id = id;
       js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+
+      // Verificar si fjs está definido y tiene un nodo padre
+      const fjs = d.getElementsByTagName(s)[0];
+      if (fjs && fjs.parentNode) {
+          fjs.parentNode.insertBefore(js, fjs);
+      } else {
+          // Si no hay un nodo padre, agregar el script al body como fallback
+          d.body.appendChild(js);
+      }
+    })(document, 'script', 'facebook-jssdk');
   }, []);
 
   // LOGIN NORMAL (usuario/contraseña)

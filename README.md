@@ -27,3 +27,6 @@ Recuerda hacer público el puerto correspondiente.
 ```sh
 npm install --save-dev jest @testing-library/react @testing-library/jest-dom @testing-library/user-event
 ```
+```sh
+npm test
+```
