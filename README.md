@@ -9,6 +9,10 @@ Antes de comenzar, asegúrate de tener activo en un Codespace "CRUD_Server_Equip
 - **GitHub Codespaces** habilitado.
 - **Docker** ejecutándose en tu Codespace.
 
+### Para el funcionamiento correcto:
+- API para LogIn de Facebook.
+- API para LogIn de Google.
+
 ### Modificar la variable de entorno:
 Asimismo, es necesario modificar las URLs en el archivo .env.development.
 Cambiando la URL de la variable "REACT_APP_URL_CRUD_SERVER" por aquella presente en el puerto 2025 del Codespace "CRUD_Server_Equipo_3" y la URL de la variable "REACT_APP_URL_IMAGEN" por la del puerto 2026. 
