@@ -9,7 +9,9 @@ Antes de comenzar, asegúrate de tener activo en un Codespace "CRUD_Server_Equip
 - **GitHub Codespaces** habilitado.
 - **Docker** ejecutándose en tu Codespace.
 
-Asimismo, es necesario modificar la línea 37 del archivo usePopup.js ubicado en la ruta src/hooks, cambiando la URL existente por aquella presente en el puerto 2025 del Codespace "CRUD_Server_Equipo_3". 
+### Modificar la variable de entorno:
+Asimismo, es necesario modificar las URLs en el archivo .env.development.
+Cambiando la URL de la variable "REACT_APP_URL_CRUD_SERVER" por aquella presente en el puerto 2025 del Codespace "CRUD_Server_Equipo_3" y la URL de la variable "REACT_APP_URL_IMAGEN" por la del puerto 2026. 
 
 ### Instala la dependencia: 
 ```sh
