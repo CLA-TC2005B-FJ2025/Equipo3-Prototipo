@@ -52,18 +52,31 @@ const Grid = ({
           };
         } else if (isInCooldown(n)) {
 
-          cellStyle.opacity = 0.5;
-          cellStyle.cursor = 'not-allowed';
+          cellStyle = {
+            opacity: 0.4,
+            cursor: 'not-allowed',
+            backgroundColor: '#333', // para dar sombreado visual
+          };
         }
 
         return (
           <div
             key={n}
-            className={`grid-item ${estado}`}
+            className={`grid-item ${estado} ${isInCooldown(n) ? 'cooldown' : ''}`}
             style={cellStyle}
-            onClick={() => {if (estado === 'libre' && !isInCooldown(n)) {onItemClick?.(n);}}} //agregar el cooldown
-          />
+            onClick={() => {
+              if (!isRevealed && !isOccupied && !isInCooldown(n)) {
+                onItemClick?.(n);
+              }
+            }}
+            title={isInCooldown(n) ? 'Espera un momento para volver a intentar' : ''}
+          >
+            {isInCooldown(n) && (
+              <div className="cooldown-tooltip">⏳</div>
+            )}
+          </div>
         );
+        
       })}
     </div>
   );

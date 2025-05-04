@@ -23,6 +23,7 @@
   cursor: pointer;
   user-select: none;
   transition: background 0.2s;
+  position: relative;
 }
 
 .grid-item:hover {
@@ -38,6 +39,16 @@
 .grid-item.ocupada {
   background: rgba(0,200,255,.25);
   pointer-events: none;   /* no se puede volver a clicar */
+}
+
+.cooldown-tooltip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  pointer-events: none;
+  z-index: 2;
 }
 
 
